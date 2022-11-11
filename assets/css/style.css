@@ -1,0 +1,154 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+body{
+    min-height: 100vh;
+}
+#selectBank, #selectSociete{
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+background-color:#ffe4c47f;
+}
+
+.cheque-row{
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    width: 90%;
+    background-color: #ffe4c47f;
+   
+}
+.montant-horizontal-line1{
+    line-height: 0.8em;
+    font-size: 8px;
+    position: relative;
+}
+
+.montant-horizontal-line1::after {
+    content: "";
+    display: block;
+    height: 2px;
+    position: absolute;
+    border-radius: 30px;
+    background-color: #DE657D;
+  }
+  .montant-horizontal-line1::after  {
+    width: calc(100% - 110px);
+    top: 37%;
+    left: 110px;
+  }
+  #somme{
+    position: absolute;
+    margin-top: -0.3em;
+    margin-left: 10px;
+    font-size: 2em;
+    
+      }
+ .text-somme-lettres{
+    position: absolute;
+    font-size: 8px;
+    right: 0;
+ }
+ .montant-horizontal-line2{
+   position: relative;
+   display: block;
+   height: 2px;
+   border-radius: 30px;
+   background-color: #DE657D;
+   width: 100%;
+ }
+
+
+.societe-horizontal-line{
+  position: relative;
+ 
+  font-size: 8px;
+
+}
+.societe-horizontal-line::after  {
+  content: "";
+  display: block;
+  height: 2px;
+  position: absolute;
+  border-radius: 30px;
+  background-color: #DE657D;
+  width: calc(100% - 10px);
+  top: 50%;
+  left: 10px;
+}
+
+#somme-plier{
+ position: absolute;
+ margin-top: -1.2em;
+ font-size: 1em;
+
+}
+
+#societe-row{
+    position: absolute;
+    margin-top: -0.8em;
+    font-size: 1.8em;
+    margin-left: 10px;
+}
+
+#cheque_lines_div{
+    position: relative;
+}
+#first_barrier,#second_barrier{
+    display: block;
+    width: 3px;
+    position: absolute;
+    border-radius: 30px;
+    background-color: #DE657D;
+    height: 100%;
+    transform: rotate(35deg);
+    top: 0;
+    opacity: 0.6;
+}
+#first_barrier{
+  
+    left: 60%;
+}
+#second_barrier{
+    left: 73%;
+}
+
+.ville-line,.date-line{
+    position: relative;
+ 
+    font-size: 12px;
+}
+.ville-line::after  {
+    content: "";
+    display: block;
+    height: 2px;
+    position: absolute;
+    border-radius: 30px;
+    background-color: #DE657D;
+    width: calc(100% - 10px);
+    top: 50%;
+    left: 10px;
+  }
+  #ville-text{
+    position: absolute;
+    margin-top: -0.8em;
+    font-size: 1.2em;
+    margin-left: 10px;
+  }
+  .date-line::after  {
+    content: "";
+    display: block;
+    height: 2px;
+    position: absolute;
+    border-radius: 30px;
+    background-color: #DE657D;
+    width: calc(100% - 15px);
+    top: 50%;
+    left: 15px;
+  }
+  #date-text{
+    position: absolute;
+    margin-top: -0.8em;
+    font-size: 1.2em;
+    margin-left: 15px;
+  }
