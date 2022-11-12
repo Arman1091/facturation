@@ -79,7 +79,7 @@
                      <th scope="col"> </th>
                  </tr>
              </thead>
-             <tbody class="tbodyImpression">
+             <tbody class="tbody" >
 
                  <?php
                     if ($factures) {
@@ -89,13 +89,13 @@
                             $societe = $societeManager->getSociete($fk_societe);
                     ?>
                          <tr>
-                             <td name="y<?= $i ?>"> <input class="xxx"name="y<?= $i ?> "class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero() ?>"></td>
-                             <td name="y2<?= $i ?>" scope="row"><p><?= ($i + 1) ?></p></td>
-                             <td name="y3<?= $i ?>"><input class="xxx"name="y<?= $i ?>" type="text" id="numeroFacture" name="numeroFacture" value="<?= $factures[$i]->numero() ?>"></td>
-                             <td name="y5<?= $i ?>"><input value="<?= $factures[$i]->date() ?>" type="date" id="dateFacture" name="dateFacture"></td>
-                             <td name="y4<?= $i ?>">
-                                 <select name="societe" id="selectSociete">
-                                     <option selected value=""><?= $societes[$i]->nom() ?></option>
+                             <td > <input  class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero() ?>"></td>
+                             <td scope="row"><p><?= ($i + 1) ?></p></td>
+                             <td value="<?= $factures[$i]->numero() ?>"><input class="td-input row" value="<?= $factures[$i]->numero() ?>"type="text" id="numeroFacture" name="numeroFacture" ></td>
+                             <td value="<?= $factures[$i]->numero() ?>"><input class="td-input"value="<?= $factures[$i]->date() ?>" type="date" id="dateFacture" name="dateFacture"></td>
+                             <td value="x">
+                                 <select name="fkSociete"class="td-input">
+                                     <option selected value=""><?= $societe->nom() ?></option>
                                      <?php foreach ($societes as $societe) : ?>
 
                                          <option value=<?= $societe->id() ?>><?= $societe->nom() ?></option>
@@ -103,9 +103,9 @@
                                      <?php endforeach ?>
                                  </select>
                              </td>
-                             <td name="y5<?= $i ?>"><?= "sdsydgsdgsdgsgdsd" ?></td>
-                             <td name="y6<?= $i ?>">
-                                 <input class="w-100  bg-olive" type="number" step="0.01" min=1 id="m" name="montant" onchange="doConvertLettres()" value="<?= $factures[$i]->montant() ?>">
+                             <td ><?= "sdsydgsdgsdgsgdsd" ?></td>
+                             <td value="<?= $factures[$i]->numero() ?>">
+                                 <input class="w-100  bg-olive td-input" type="number" step="0.01" min=1 id="m" name="montantFacture" value="<?= $factures[$i]->montant() ?>">
                              </td>
                              <td>
                                  <button type="button" class="btn btn-danger deleteButton" style="height: 60%;" value="<?php echo ($factures[$i]->numero()) ?>">Delete</button>

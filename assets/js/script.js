@@ -251,82 +251,50 @@ function remplireSocieteCase(societe){
          }
      });
  });
-//  function creeTable(){
-//     var tbody= document.getElementsByClassName("tbodyImpression")[0];
-//    tbody.innerHTML="";
-//    var resultat = `  <tr>
-//    <td><input class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero() ?>"></td>
-//    <td scope="row">"<?= ($i + 1)?>"</td>
-//    <td><input type="text" id="numeroFacture" name="numeroFacture" value="nfact"></td>
-//    <td><input value="date" type="date" id="dateFacture" name="dateFacture"></td>
-//    <td>
-//    <select name="societe" id="selectSociete">
-//             <option selected value="dfdf"><?= $societes[$i]->nom() ?></option>
-//             <?php foreach ($societes as $societe) : ?>
-//                 <option value=<?= $societe->id() ?>>{<?= "$societe->nom() ?>}</option>
-//             <?php endforeach ?>
-//         </select>
-//    </td>
-//    <td>banque</td>
-//    <td>
-//    <input class="w-100  bg-olive" type="number" step="0.01" min=1 id="m" name="montant" onchange="doConvertLettres()" value="montant">
-//    </td>
-//    <td>
-//    <button type="button" class="btn btn-danger deleteButton" style="height: 60%;" value="facturenumero">Delete</button>
-//    </td>
-// </tr>`;
-// tbody.innerHTML=resultat;
-// // const tblBody =document.createElement("tbody");
-// // const row = document.createElement("tr");
-// // for (let i = 0; i < 2; i++) {
-// //     // creates a table row
-// //     const row = document.createElement("tr");
-
-  
-// //       // Create a <td> element and a text node, make the text
-// //       // node the contents of the <td>, and put the <td> at
-// //       // the end of the table row
-// //       const cell1 = document.createElement("td");
-// //       const cell2 = document.createElement("td");
-// //       const cell3 = document.createElement("td");
-// //       const cell4 = document.createElement("td");
-// //       const cell5 = document.createElement("td");
-// //       const cell6 = document.createElement("td");
-// //       const cell7 = document.createElement("td");
-// //       const cell8 = document.createElement("td");
-// //       const cellText = document.createTextNode(`cell in row , column x`);
-// //       cell1.appendChild(cellText);
-// //       cell2.appendChild(cellText)
-// //       cell3.appendChild(cellText)
-// //       cell4.appendChild(cellText)
-// //       cell5.appendChild(cellText)
-// //       cell6.appendChild(cellText)
-// //       cell7.appendChild(cellText)
-// //       cell8.appendChild(cellText)
-// //       row.appendChild(cell1);
-// //       row.appendChild(cell2);
-// //       row.appendChild(cell3);
-// //       row.appendChild(cell4);
-// //       row.appendChild(cell5);
-// //       row.appendChild(cell6);
-// //       row.appendChild(cell7);
-// //       row.appendChild(cell8);
-// //     }
-
-// //     // add the row to the end of the table body
-// //     tblBody.appendChild(row);
-// // 
-//  }
-//  $("#attTable").change(function() { 
-// var tr = $(this).closest("tbody").closest('tr');
-// console.log(tr);
-//  });
- $('#tbodyImpression').each(function() {
-    let x= this;
-    x.change(function(){
-        alert("d");
+ $('table').on('click','.deleteButton',function(){;
+    var currentRow = $(this).closest("tr");
+    var deleteRow = currentRow.find(".checkitem")[0].value
+    $.ajax(
+    {
+         url:'models/includes/fetchImpression.php',
+         type:'POST',
+         data:{
+            'deleteRow': deleteRow,
+        },
+         beforeSend:function(){
+         console.log("woeking on");
+         },
+         success:function(e){
+            if(confirm("Vous voulez supprimer")){
+                window.location.href="impression";
+            }
+         }
     });
-});
-$('#tbodyImpressio').change(function(){
-    alert("sdddddddd");
+ });
+
+
+ $('table').on('change','.td-input',function(){
+    var colName = this.name;
+    var value = this.value;
+    var currentRow = $(this).closest("tr");
+    var nFact = currentRow.find(".checkitem")[0].value;
+
+      $.ajax(
+          {
+          url:'models/includes/fetchImpression.php',
+          type:'POST',
+          data:{
+              'numeroFacture': nFact,
+              'editCol':colName,
+              'editValue':value,
+          },
+          beforeSend:function(){
+          console.log("woeking on");
+          },
+          success:function(e){
+
+                  window.location.href="impression";
+
+          }
+      });
 })
