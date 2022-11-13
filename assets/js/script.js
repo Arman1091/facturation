@@ -126,32 +126,7 @@ checkboxes.forEach(function(checkbox){
 
 
 
- $('.sitesearch').on("input", function () {
-    filtre_checked=0;
-    let input,filter, table,tr,td_soc,td_fac, tcvalue;
-    input= document.getElementById('sitesearch').value;
-    filter  = input.toUpperCase();
-    table =document.getElementById("attTable");
-    tr=table.getElementsByTagName("tr");
-    for(let i=1;i<tr.length;i++){
-        td_soc = tr[i].getElementsByTagName("td")[3];
-        td_fac = tr[i].getElementsByTagName("td")[4];
-        if(td_soc || td_fac ){
-            txtSoc = td_soc.innerText;
-            txtFac=td_fac.innerText;
-            if(txtSoc.toUpperCase().indexOf(filter)>-1 || txtFac.toUpperCase().indexOf(filter)>-1 ){
-                tr[i].style.display="";
-                filtre_checked++;
-                console.log(filtre_checked);
-            }else{
-                tr[i].style.display="none";
-            }
-        }
-    }
-  
-        //document.getElementById("serachForm").submit();
 
- })
 
 //  function f(){
 
@@ -233,43 +208,44 @@ function remplireSocieteCase(societe){
 
 
 
- $(".deleteButton").click(function() { 
-    console.log(this.value);
-    alert('sd');
-         $.ajax(
-         {
-         url:'models/includes/fetchImpression.php',
-         type:'POST',
-         data:'deleteRow='+ this.value,
-         beforeSend:function(){
-         console.log("woeking on");
-         },
-         success:function(e){
-            if(confirm("Vous voulez supprimer")){
-                window.location.href="impression";
-            }
-         }
-     });
- });
+//  $(".deleteButton").click(function() { 
+//     console.log(this.value);
+//     alert('sd');
+//          $.ajax(
+//          {
+//          url:'models/includes/fetchImpression.php',
+//          type:'POST',
+//          data:'deleteRow='+ this.value,
+//          beforeSend:function(){
+//          console.log("woeking on");
+//          },
+//          success:function(e){
+//             if(confirm("Vous voulez supprimer")){
+//                 window.location.href="impression";
+//             }
+//          }
+//      });
+//  });
  $('table').on('click','.deleteButton',function(){;
     var currentRow = $(this).closest("tr");
-    var deleteRow = currentRow.find(".checkitem")[0].value
-    $.ajax(
-    {
-         url:'models/includes/fetchImpression.php',
-         type:'POST',
-         data:{
-            'deleteRow': deleteRow,
-        },
-         beforeSend:function(){
-         console.log("woeking on");
+    var deleteRow = currentRow.find(".row")[0].value;
+     $.ajax(
+     {
+          url:'models/includes/fetchImpression.php',
+          type:'POST',
+          data:{
+             'deleteRow': deleteRow,
          },
-         success:function(e){
-            if(confirm("Vous voulez supprimer")){
-                window.location.href="impression";
-            }
-         }
-    });
+          beforeSend:function(){
+          console.log("woeking on");
+          },
+          success:function(e){
+             if(confirm("Vous voulez supprimer")){
+                 currentRow.remove();
+                 // window.location.href="impression";
+             }
+          }
+     });
  });
 
 
@@ -293,8 +269,139 @@ function remplireSocieteCase(societe){
           },
           success:function(e){
 
-                  window.location.href="impression";
+                //   window.location.href="impression";
 
           }
       });
 })
+
+
+$('.search').on('input',function(){
+ 
+    dispatchEvent;
+     $.ajax(
+         {
+        url:'models/includes/fetchImpression.php',
+        type:'POST',
+        data:'search='+ this.value,
+        beforeSend:function(){
+        console.log("woeking on");
+        },
+        success:function(data){
+            let parseDate= JSON.parse(data);
+            getSocietes(parseDate);
+      
+         }
+     });
+ });
+ function getSocietes(data){
+    $.ajax(
+        {
+       url:'models/includes/fetchImpression.php',
+       type:'POST',
+       data:'societes',
+       beforeSend:function(){
+       console.log("woeking on");
+       },
+       success:function(societes){
+           let parseSocietes= JSON.parse(societes);
+           creeTable(data,parseSocietes); 
+        }
+    });
+ }
+ function creeTable(data, societes){
+   var tbody= document.getElementsByClassName("tbody")[0];
+   tbody.innerHTML="";
+   var resultat="" ;
+//     societes.map(function(element){
+// //    $('#my_table').append(`<tr>
+// //         <td>${row.name}</td>
+// //         <td>${row.surname}</td>
+// //         <td>${row.age}</td>
+// //     </tr>`);
+// //   });
+//    data.map(function(element){
+//   resultat += `  <tr>
+//   <td > <input  class="checkitem" type="checkbox" name=checkitems[] value="${element['numeroFacture']}" ></td>
+//   <td scope="row"><p>1</p></td>
+//   <td><input class="td-input row"  value="${element['numeroFacture']}" type="text" id="numeroFacture" name="numeroFacture" ></td>
+//   <td><input class="td-input" value="${element['dateFacture']}"  type="date" id="dateFacture" name="dateFacture"></td>
+//   <td>
+//       <select name="fkSociete"class="td-input">
+//       <option selected value="">${element['nomSociete']}</option>`+
+//       societes.map(function(societe){+`
+//         <option >22</option>`+
+//       });
+      
+//        +`</select>
+//   </td>
+//   <td > ${element['nomBanque']}</td>
+//   <td>
+//       <input class="w-100  bg-olive td-input" type="number" step="0.01" min=1 id="m" name="montantFacture"  value="${element['montantFacture']}" >
+//   </td>
+//   <td>
+//       <button type="button" class="btn btn-danger deleteButton" style="height: 60%;"  value="${element['numeroFacture']}">Delete</button>
+//   </td>
+// </tr>`;
+// });
+// tbody.innerHTML=resultat;
+data.map(function(element){
+const row = document.createElement("tr");
+
+  
+    // Create a <td> element and a text node, make the text
+    // node the contents of the <td>, and put the <td> at
+    // the end of the table row
+    const cell1 = document.createElement("td");
+    const cell2 = document.createElement("td");
+    const cell3 = document.createElement("td");
+    const cell4 = document.createElement("td");
+    const cell5 = document.createElement("td");
+    const cell6 = document.createElement("td");
+    const cell7 = document.createElement("td");
+    const cell8 = document.createElement("td");
+    cell1.innerHTML=`<input  class="checkitem" type="checkbox" name=checkitems[] value="${element['numeroFacture']}" >`;
+    cell2.innerHTML = 1;
+    cell3.innerHTML=`<input class="td-input row"  value="${element['numeroFacture']}" type="text" id="numeroFacture" name="numeroFacture" >`;
+    cell4.innerHTML=`<input class="td-input" value="${element['dateFacture']}"  type="date" id="dateFacture" name="dateFacture">`;
+    let select = document.createElement("select");
+    let selectedOption = document.createElement("option");
+    selectedOption.innerHTML=` <option selected value="">${element['nomSociete']}</option>`;
+    select.appendChild(selectedOption);
+    societes.map(function(societe){
+        let option = document.createElement("option");
+        option.innerHTML=`<option value="${societe['id']}">${societe['nomSociete']} </option>`;
+        select.appendChild(option);
+    });
+    cell5.appendChild(select)
+    cell6.innerHTML=`${element['nomBanque']}`;
+    cell7.innerHTML = `<button type="button" class="btn btn-danger deleteButton" style="height: 60%;"  value="${element['numeroFacture']}">Delete</button>`;
+
+    row.appendChild(cell1);
+    row.appendChild(cell2);
+    row.appendChild(cell3);
+    row.appendChild(cell4);
+    row.appendChild(cell5);
+    row.appendChild(cell6);
+    row.appendChild(cell7);
+    row.appendChild(cell8);
+    tbody.appendChild(row);
+  })
+  // add the row to the end of the table body
+}
+
+function load_data(page, query=''){
+    $.ajax(
+        {
+       url:'models/includes/fetchImpression.php',
+       type:'POST',
+       data:{page:page, query:query},
+       beforeSend:function(){
+       console.log("woeking on");
+       },
+       success:function(data){
+           let parseSocietes= JSON.parse(data);
+           console.log(parseSocietes);
+        }
+    });
+}

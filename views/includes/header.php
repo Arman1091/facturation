@@ -29,7 +29,7 @@
             <button class="navbar-toggler" style="margin-right:5px !important;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse top_nav" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse top_nav justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar  navbar-nav navbar-rigth">
                     <li class=" nav-item">
                         <a href="<?= URL ?>" class="nav-link">Accueil</a>
@@ -37,9 +37,9 @@
                     </li>
                     <li class="nav-item "><a href="<?= URL ?>impression" class="nav-link">Impression</a>
                     </li>
-                    <li class="nav-item "><a href="<?= URL ?>signer" class="nav-link">Signer</a>
+                    <li class="nav-item "><a href="<?= URL ?>signature" class="nav-link">Signature</a>
                     </li>
-                    <li class="nav-item "><a href="<?= URL ?>envoi" class="nav-link">Gérer l'envoie</a>
+                    <li class="nav-item "><a href="<?= URL ?>envoi" class="nav-link">Expedition</a>
                     </li>
                     <li class="nav-item "><a href="<?= URL ?>historique" class="nav-link">Historique</a>
                     </li>

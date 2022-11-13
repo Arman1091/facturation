@@ -1,26 +1,14 @@
  <?php
-    if (isset($_POST['deleteRow']) && !empty($_POST['deleteRow'])) {
-        try {
-            $factureManager = new FactureManager;
-            $factureManager->deleteFacture($_POST['deleteRow']);
-            header("Location:" . URL . "accueil");
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            die();
-        }
-    }
     if (!empty($_POST)) {
         if (isset($_POST["checkitems"])) {
             $checkitems = $_POST["checkitems"];
             if (isset($_POST["deleteOrPrint"])) {
                 $count = count($checkitems);
-
                 if ($_POST["deleteOrPrint"] == 1) {
-
-                    $elementManager = new ElementManager;
+                    $factureManager = new FactureManager;
                     for ($i = 0; $i < $count; $i++) {
                         $id = $checkitems[$i];
-                        $elementManager->DeleteElement($id);
+                        $factureManager->deleteFacture($id);
                         //require "controllers/deleteFacture.php";
                     }
                     header("Location:" . URL . "impression");
@@ -56,7 +44,7 @@
      <form action="" method="post" id="serachForm">
          <label class="mx-2" for="site-search"><strong>Search avec Societe/N_fact</strong></label>
 
-         <input class="sitesearch" type="search" id="sitesearch" name="site-search">
+         <input class="search" type="search" id="search" name="site-search">
      </form>
 
  </div>
@@ -90,7 +78,7 @@
                     ?>
                          <tr>
                              <td > <input  class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero() ?>"></td>
-                             <td scope="row"><p><?= ($i + 1) ?></p></td>
+                             <td  scope="row"><p class="mx-2"><?= ($i + 1) ?></p></td>
                              <td value="<?= $factures[$i]->numero() ?>"><input class="td-input row" value="<?= $factures[$i]->numero() ?>"type="text" id="numeroFacture" name="numeroFacture" ></td>
                              <td value="<?= $factures[$i]->numero() ?>"><input class="td-input"value="<?= $factures[$i]->date() ?>" type="date" id="dateFacture" name="dateFacture"></td>
                              <td value="x">

@@ -16,7 +16,6 @@ class View
 
         //partie specifice de la vue
         $content = $this->generateFile($this->file, $data);
-
         //template
         $view = $this->generateFile('views/template.php', array('t' => $this->_t, 'content' => $content));
         echo $view;
