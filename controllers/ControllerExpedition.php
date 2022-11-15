@@ -1,8 +1,8 @@
 <?php
 require_once('views/View.php');
-class ControllerEnvoi
+class ControllerExpedition
 {
-    private $envoiManager;
+    private $expeditionManager;
     private $view;
 
     public function __construct($url)

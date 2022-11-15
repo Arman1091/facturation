@@ -1,20 +1,6 @@
 <?php
 
 if (!empty($_POST)) {
-
-
-
-    if (isset($_POST['deleteRow']) && !empty($_POST['deleteRow'])) {
-
-        header("Location:" . URL . "impression");
-    }
-    
-
-
-
-    //On vérifie que tout les champs requis son remplis  
-
-    //a voir save and printe***************s
     if (
         isset(
             $_POST['societe'],
@@ -36,8 +22,9 @@ if (!empty($_POST)) {
 
         $date_facture = strip_tags($_POST['dateFacture']);
         $statut = 0;
+
         if ($_POST['saveAndPrint']) {
-            // require_once('models/includes/pdf-print.php');
+             require_once('models/includes/pdf-print.php');
             $statut = 1;
         }
 

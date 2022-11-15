@@ -110,8 +110,7 @@ if (isset($_POST['page'], $_POST['query'])&& !empty($_POST['page']) && !empty($_
     }
 
     try {
-        $sql = "UPDATE `facture` SET " . $editCole . "=:colName
-        WHERE `numeroFacture`=:nFact";
+        $sql = "SELECT *FROM `facture`";
 
 
         $query = $_bdd->prepare($sql);
