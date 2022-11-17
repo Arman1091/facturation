@@ -14,13 +14,14 @@ if (!empty($_POST)) {
         if (!filter_var($_POST['societe'], FILTER_VALIDATE_INT)) {
             die("SocieteId est incorrect");
         }
-        $societe_id = strip_tags($_POST['societe']);
-        $numero_facture = strip_tags($_POST['numeroFacture']);
+        $societe_id = htmlspecialchars(strip_tags($_POST['societe']));
+        $numero_facture = htmlspecialchars(strip_tags($_POST['numeroFacture']));
         if (!filter_var($_POST['montant'], FILTER_VALIDATE_FLOAT)) {
             die("Montant est incorrect");
         }
-
-        $date_facture = strip_tags($_POST['dateFacture']);
+        $montant = htmlspecialchars(strip_tags($_POST['montant']));
+        $montant_lettres = htmlspecialchars(strip_tags($_POST['montantLettres']));
+        $date_facture = htmlspecialchars(strip_tags($_POST['dateFacture']));
         $statut = 0;
 
         if ($_POST['saveAndPrint']) {
@@ -32,7 +33,8 @@ if (!empty($_POST)) {
             "dateFacture" => $date_facture,
             "fkSociete" => $societe_id,
             "numeroFacture" =>  $numero_facture,
-            "montantFacture" => $_POST['montant'],
+            "montantFacture" => $montant,
+            "montantLettresFacture" => $montant_lettres,
             "statutFacture" => $statut
         ]);
 
@@ -64,17 +66,22 @@ if (!empty($_POST)) {
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label class="text-danger" class="d-block" for="montant">Somme</label>
+                            <label class="text-danger" class="d-block" for="montant">Montant</label>
+                            <input class="form-control" type="hidden" id="montantLettres" name="montantLettres" value="x">
                             <!-- voir apres********* -->
                             <input class="w-100 form-control bg-olive" type="number" step="0.01" min=1 id="montant" name="montant" onchange="doConvertLettres()">
                         </div>
                         <div class=" form-group mt-2">
                             <label class="text-danger" for="numeroFacture">N°FACT</label>
                             <input class=" form-control" type="text" id="numeroFacture" name="numeroFacture" style="width: 100%">
+                            <span class="text-danger" id="erreurMessageFacture"></span>
                         </div>
                         <div class=" form-group mt-2 ">
                             <label class="text-danger" for="dateFacture">Date de Facture</label>
                             <input class="form-control" type="date" id="dateFacture" name="dateFacture">
+                        </div>
+                        <div>
+                            <span id="erreurForm"class="text-center text danger"> </span>
                         </div>
                     </form>
                 </div>
@@ -85,7 +92,7 @@ if (!empty($_POST)) {
             <div class="row cheque-row  mt-3  p-2">
                 <div class="col-sm-8">
                     <div class="mt-2">
-                        <img src="assets/img/Caisse-deparagne.webp" alt="" style="width: 25%; ">
+                        <img id="iconBanque" src="z" alt="" style="width: 25%; ">
                     </div>
                     <div id="cheque_lines_div" class="mt-3">
                         <ul class=" list-unstyled">
@@ -168,7 +175,9 @@ if (!empty($_POST)) {
     </div>
     <div class="text-center mt-3">
         <button class="btn bg-primary " type="submit" form="factureForme" name="saveAndPrint" value="0">Submit</button>
-        <button class="btn bg-secondary mx-1" type="submit" form="factureForme" name="saveAndPrint" value="1">Print</button>
+        <button class="btn bg-secondary mx-1" type="button"  value="1" onclick="printTrigger()">Print</button>
     </div>
-
+ <div>
+<iframe id="iFramePdf" src="models/includes/pdf-print.php" style="display: none;"></iframe>
+</div> 
 </div>

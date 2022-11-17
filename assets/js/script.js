@@ -1,6 +1,7 @@
 function doConvert (){
     let numberInput = document.querySelector('#montant').value ;
     let sommeLettres = document.querySelector('#somme');
+    let montantLettres = document.querySelector('#montantLettres');
 
 
     let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
@@ -22,6 +23,7 @@ function doConvert (){
     outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : ''; 
 
     sommeLettres.innerHTML = outputText;
+    montantLettres.value = outputText;
 }
 
 
@@ -60,7 +62,7 @@ function doConvertLettres(){
 let v = 0;
 var checkboxes = document.querySelectorAll("input[type='checkbox']");
 $('.selectAll').change(function(){
-    
+  alert("sdsd");
     // if(tr[i].style.display="none";)
 if($(this).prop("checked")){
     checkboxes.forEach(function(checkbox){
@@ -82,11 +84,11 @@ checkboxes.forEach(function(checkbox){
      
             if(this.checked==false){
                 $('.selectAll').prop("checked", false);
-                if(document.getElementById('sitesearch').value){
+                if(document.getElementById('search').value){
                 checked--;
                 }
             }else {
-            if(!document.getElementById('sitesearch').value){
+            if(!document.getElementById('search').value){
                 filtre_checked=0;
                 checked = 0;
                 console.log($(".checkitem:checked").length);
@@ -165,7 +167,7 @@ $("#selectSociete").on('change', function(){
     let societe = this.options[this.selectedIndex].text;
     remplireSocieteCase(societe);
     let idSociete = this.value;
-    console.log(idSociete);
+   
  
     $.ajax(
         {
@@ -177,7 +179,6 @@ $("#selectSociete").on('change', function(){
         },
         success:function(data){
         let parseDate= JSON.parse(data);
-        console.log(parseDate);
         remplireBaqueCase(parseDate);
         
         }
@@ -192,14 +193,68 @@ function remplireSocieteCase(societe){
     let ville = document.getElementById("villeBanque");
     let tel = document.getElementById("telBanque");
     let adresse= document.getElementById('adresseBanque');
-    console.log(tel);
+    let icon = document.getElementById('iconBanque');
+
+    //assets/img/BNP.xcf
+   
 
     cp.innerHTML =data['cpBanque'];
     ville.innerHTML = data['villeBanque'];
     tel.innerHTML = data['telBanque'];
     adresse.innerHTML = data['adresseBanque'];
-    console.log(data);
+    icon.src="assets/img/"+data['courtNomBanque'];
+    console.log( icon);
  }
+
+ $('#factureForme').on('change','#numeroFacture',function(event){
+    let numeroFacture = this.value;
+    let errMesaage = document.getElementById("erreurMessageFacture");
+    errMesaage.innerHTML="";
+     $.ajax(
+         {
+         url:'models/includes/checkFactureExistence.php',
+         type:'POST',
+         data:{
+            'chackFacture': numeroFacture,
+        },
+         success:function(msg){
+            if(msg !==""){
+                
+                // console.log(event[preventDefault()]);
+                  event.preventDefault();
+                errMesaage.innerHTML = msg;
+            }
+      
+         }
+     });
+
+});
+// if(document.forms["factureForme"]){
+//     //appele quand on click la button submit
+//     //$('#factureForme').on('click','.deleteButton',function(){
+//       document.forms["factureForme"].addEventListener("submit", function(e){
+//         alert("sj");
+//           var err;
+//           let inputs =document.getElementsByTagName("input");
+//           console.log(inputs); 
+//       for(var i=0; i<inputs.length; i++){
+      
+//               if(inputs[i].value===''){
+//                   err = "Veuillez renseigner tout les champs";
+//               break;
+//           } else {
+//                   document.getElementById("err").innerHTML = "";
+//           }
+//       }
+//       alert("ssdj");
+//       if((err)){
+//         alert("sdj");
+//         e.preventDefault();
+//           document.getElementById("erreurForm").value = err;    
+//       }
+//       });
+//   };
+
 //  if(($("#formImpression"))){
 
 //     console.log($("#formImpression"));
@@ -226,26 +281,33 @@ function remplireSocieteCase(societe){
 //          }
 //      });
 //  });
- $('table').on('click','.deleteButton',function(){;
-    var currentRow = $(this).closest("tr");
-    var deleteRow = currentRow.find(".row")[0].value;
-     $.ajax(
-     {
-          url:'models/includes/fetchImpression.php',
-          type:'POST',
-          data:{
-             'deleteRow': deleteRow,
-         },
-          beforeSend:function(){
-          console.log("woeking on");
+ $('table').on('click','.deleteButton',function(){
+    let searchValue = document.getElementById('search').value;
+    let tbody = $('table');
+  
+     var currentRow = $(this).closest("tr");
+     var deleteRow = currentRow.find(".row")[0].value;
+ 
+      $.ajax(
+      {
+           url:'models/includes/fetchImpression.php',
+           type:'POST',
+           data:{
+              'deleteRow': deleteRow,
+              'searchValue':((searchValue !="") ? searchValue : ""),
           },
-          success:function(e){
-             if(confirm("Vous voulez supprimer")){
-                 currentRow.remove();
-                 // window.location.href="impression";
-             }
-          }
-     });
+           beforeSend:function(){
+           console.log("woeking on");
+           },
+           success:function(e){
+         console.log(e);
+                //  //  currentRow.remove();
+                //  //  // window.location.href="impression";
+                //  tbody.innerHTML="";
+                //  tbody.html(e);
+          
+           }
+      });
  });
 
 
@@ -278,7 +340,7 @@ function remplireSocieteCase(societe){
 
 $('.search').on('input',function(){
  
-    dispatchEvent;
+
      $.ajax(
          {
         url:'models/includes/fetchImpression.php',
@@ -288,8 +350,8 @@ $('.search').on('input',function(){
         console.log("woeking on");
         },
         success:function(data){
-            let parseDate= JSON.parse(data);
-            getSocietes(parseDate);
+           // let parseDate= JSON.parse(data);
+          //  getSocietes(parseDate);
       
          }
      });
@@ -404,4 +466,51 @@ function load_data(page, query=''){
            console.log(parseSocietes);
         }
     });
+}
+
+
+function printTrigger() {
+    $.ajax(
+        {
+       url:'models/includes/test.php',
+       type:'POST',
+       data:'cheque',
+       beforeSend:function(){
+       console.log("woeking on");
+       },
+       success:function(data){
+            html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
+            // pdfObj has your jsPDF object in it, use it as you please!
+            // For instance (untested):
+            pdfObj.autoPrint();
+          window.open( pdfObj.output('bloburl'), 'F');
+        });
+        }
+    });
+}
+
+function test(){
+    alert("sd");
+    $.ajax(
+        {
+       url:'models/includes/test.php',
+       type:'POST',
+       data:'test',
+       beforeSend:function(){
+       console.log("woeking on");
+       },
+       success:function(data){
+        html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
+            // pdfObj has your jsPDF object in it, use it as you please!
+            // For instance (untested):
+            pdfObj.autoPrint();
+           pdfObj.output('bloburl', 'F');
+        });
+        }
+    });
+}
+function ff(){
+  let y = document.getElementById('test10');
+  console.log("sdd");
+  console.log(y);
 }

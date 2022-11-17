@@ -3,7 +3,7 @@ require_once('views/View.php');
 class ControllerSignature
 {
 
-    private $signatureManager;
+    private $factureManager;
     private $view;
 
     public function __construct($url)
@@ -28,9 +28,9 @@ class ControllerSignature
     public function signes()
     {
 
-        $this->signatureManager = new SignatureManager;
-        $signes = $this->signatureManager->getArticles();
+        $this->factureManager = new FactureManager;
+        $factures = $this->factureManager->getFactures();
         $this->view = new View('Signature');
-        $this->view->generate(array('signes' => $signes));
+        $this->view->generate(array('factures' => $factures));
     }
 }

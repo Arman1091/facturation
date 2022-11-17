@@ -3,8 +3,9 @@ class Facture
 {
     private $numero;
     private $date;
-    private  $statut = 0;
+    private $statut ;
     private $montant;
+    private $montantLettres;
     private $fkSociete;
     public function __construct(array $data)
     {
@@ -26,7 +27,6 @@ class Facture
     {
         if (is_string($n_fact)) {
             $this->numero = $n_fact;
-            $x = [];
         }
     }
     public function setDateFacture($date_fact)
@@ -46,6 +46,12 @@ class Facture
         $montant = (float) $montant;
         if ($montant  > 0) {
             $this->montant = $montant;
+        }
+    }
+    public function setMontantLettresFacture($montant_lettres)
+    {
+        if (is_string($montant_lettres)) {
+            $this->montantLettres = $montant_lettres;
         }
     }
 
@@ -75,7 +81,10 @@ class Facture
     {
         return $this->montant;
     }
-
+    public function getMontantLettres()
+    {
+        return $this->montantLettres;
+    }
     public function statut()
     {
         return $this->statut;

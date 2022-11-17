@@ -75,6 +75,8 @@
 
                             $fk_societe = (int) $factures[$i]->fkSociete();
                             $societe = $societeManager->getSociete($fk_societe);
+                            $banque = $societe->getBanque();
+
                     ?>
                          <tr>
                              <td > <input  class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero() ?>"></td>
@@ -91,7 +93,7 @@
                                      <?php endforeach ?>
                                  </select>
                              </td>
-                             <td ><?= "sdsydgsdgsdgsgdsd" ?></td>
+                             <td ><?= $banque->nom() ?></td>
                              <td value="<?= $factures[$i]->numero() ?>">
                                  <input class="w-100  bg-olive td-input" type="number" step="0.01" min=1 id="m" name="montantFacture" value="<?= $factures[$i]->montant() ?>">
                              </td>
@@ -110,13 +112,16 @@
              <button type="submit" class="btn btn-danger" name="deleteOrPrint" value=1>Delete</button>
              <button type="submit" class="btn btn-primary" name="deleteOrPrint" value=0>Print</button>
          </div>
-     </form>
-
-     <!-- <div id="pagination">
+         <div id="pagination" class="d-flex justify-content-center">
         <?php
-        for ($i = 1; $i <= $nombre_de_page; $i++) {
+        echo "<a href=''><<</a>&nbsp";
+        for ($i = 1; $i <= 3; $i++) {
             echo "<a href=''>$i</a>&nbsp";
         }
+        echo "<a href=''>>></a>&nbsp";
         ?>
-    </div> -->
+     </form>
+
+   
+    </div> 
  </div>

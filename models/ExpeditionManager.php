@@ -1,5 +1,5 @@
 <?php
-class EnvoiManager extends Model
+class ExpeditionManager extends Model
 {
     static $bdd;
 
@@ -7,7 +7,7 @@ class EnvoiManager extends Model
     {
         self::$bdd = $this->getBdd();
         try {
-            $sql = "SELECT * from factue_historique WHERE `statut`=1 AND `dateDepart` IS NULL";
+            $sql = "SELECT * from facture WHERE `statutFacture`=1 ";
             $query = self::$bdd->prepare($sql);
             $query->execute();
             $envois = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -17,6 +17,7 @@ class EnvoiManager extends Model
                     $var[] = new  Facture($envois[$i]);
                 }
                 return $var;
+             
             }
             $query->closeCursor();
         } catch (PDOException $e) {

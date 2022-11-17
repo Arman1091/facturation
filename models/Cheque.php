@@ -9,6 +9,10 @@ class Cheque
     private $dateExpedition;
     private $description;
     private $fkFacture;
+    
+    private $factureManager;
+    static $bdd;
+
     public function __construct(array $data)
     {
         $this->hydrate($data);
@@ -94,5 +98,27 @@ class Cheque
     public function fkFacture()
     {
         return $this->fkFacture;
+    }
+
+     //get le facture  par numero  du cheque
+     public function getFacture(){
+        try {
+            $this->factureManager = new FactureManager;
+            $bdd =$this->factureManager->getFactureBdd();
+           // self::$bdd=$this->factureManager->getBddCheque();
+            $sql = 'SELECT * FROM `facture` 
+                    WHERE numeroFacture =:NFact';
+            $req = $bdd->prepare($sql);
+            $req->bindValue(':NFact', $this->fkFacture(), PDO::PARAM_STR);
+            $req->execute();
+            $data = $req->fetch(PDO::FETCH_ASSOC);
+           if(isset($data)){
+            $banque = new Facture($data);
+            return $banque;
+           }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            die();
+        }
     }
 }

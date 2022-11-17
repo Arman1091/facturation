@@ -31,7 +31,7 @@ class ControllerImpression
     {
         $this->impressionManager = new FactureManager;
         $this->societeManager = new SocieteManager;
-        $factures = $this->impressionManager->getFacturesAttantes();
+        $factures = $this->impressionManager->getFacturesAttantes(0);
         $societes = $this->societeManager->getSocietes();
         $this->view = new View('Impression');
         $this->view->generate(array('factures' => $factures,

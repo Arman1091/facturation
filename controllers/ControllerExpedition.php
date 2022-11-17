@@ -2,7 +2,7 @@
 require_once('views/View.php');
 class ControllerExpedition
 {
-    private $expeditionManager;
+    private $chequeManager;
     private $view;
 
     public function __construct($url)
@@ -26,9 +26,9 @@ class ControllerExpedition
 
     public function envois()
     {
-        $this->envoiManager = new EnvoiManager;
-        $envois = $this->envoiManager->getAllEnvois();
-        $this->view = new View('Envoi');
-        $this->view->generate(array('envois' => $envois));
+        $this->chequeManager = new ChequeManager;
+        $cheques = $this->chequeManager->getChequesAttantes("statutChequeSignature",0);
+        $this->view = new View('Expedition');
+        $this->view->generate(array('cheques' => $cheques));
     }
 }

@@ -4,7 +4,8 @@ class Societe
     private $id;
     private $nom;
     private $fkBanque;
-
+    private $societeManager;
+    static $bdd;
     public function __construct(array $data)
     {
         $this->hydrate($data);
@@ -57,5 +58,28 @@ class Societe
     public function fkBanque()
     {
         return $this->fkBanque;
+    }
+
+    //get la banque par id de la societe
+    public function getBanque(){
+        try {
+            $this->societeManager = new SocieteManager;
+            self::$bdd=$this->societeManager->getBddSociete();
+            $sql = 'SELECT * FROM `societe` AS soc
+                    INNER JOIN `banque` AS bnq
+                    ON soc.fkBanque = bnq.id
+                    WHERE soc.id=:id';
+            $req = self::$bdd->prepare($sql);
+            $req->bindValue(':id', $this->id(), PDO::PARAM_INT);
+            $req->execute();
+            $data = $req->fetch(PDO::FETCH_ASSOC);
+           if(isset($data)){
+            $banque = new Banque($data);
+            return $banque;
+           }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            die();
+        }
     }
 }

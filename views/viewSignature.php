@@ -12,32 +12,39 @@ $societeManager = new SocieteManager;
 
                     </th>
                     <th scope="col">Id</th>
-                    <th scope="col">Numero Facture</th>
+                    <th scope="col">N°Facture</th>
+                    <th scope="col">Date Facture</th>
                     <th scope="col">Societe</th>
                     <th scope="col">Banque</th>
                     <th scope="col">Montant</th>
-                    <th scope="col">Date_cheque</th>
-                    <th scope="col">N_cheque</th>
-                    <th scope="col">Signer</th>
+                    <th scope="col">N°Cheque</th>
+                    <th scope="col">Montant Cheque</th>
+                    <th scope="col">Signature</th>
                     <th scope="col"> </th>
                 </tr>
             </thead>
             <tbody>
-                <?php for ($i = 0; $i < count($signes); $i++) {
-                    $fk_soc = (int) $signes[$i]->FkSociete();
-                    $societe = $societeManager->getSociete($fk_soc);
+                <?php       
+                if ($factures) {
+                        for ($i = 0; $i < count($factures); $i++) {
 
+                            $fk_societe = (int) $factures[$i]->fkSociete();
+                            $societe = $societeManager->getSociete($fk_societe);
+                            $banque = $societe->getBanque();
+
+                    
 
                 ?>
                     <tr>
-                        <td name="y<?= $i ?>"><input class="checkitem" type="checkbox" name=checkitems[] value="<?= $signes[$i]->numero() ?>"></td>
+                        <td name="y<?= $i ?>"><input class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero()?>"></td>
                         <th scope="row"><?= ($i + 1) ?></th>
-                        <td><?= $signes[$i]->numero() ?></td>
+                        <td><?= $factures[$i]->numero()?></td>
+                        <td><?= $factures[$i]->date()?></td>
                         <td><?= $societe->nom() ?></td>
-                        <td>fdfdf</td>
-                        <td><?= $signes[$i]->montant() ?></td>
-                        <td>df</td>
-                        <td><?= 25 ?></td>
+                        <td><?= $banque->nom() ?></td>
+                        <td><?= $factures[$i]->montant()?></td>
+                        <td><input class="td-input " value=""type="text" id="numeroCheque" name="numeroCheque" ></td>
+                        <td><input class="td-input"value="" type="date" id="dateCheque" name="dateCheque"></td>
                         <td>
                         
                                 <input type="checkbox" id="tt" data-toggle="toggle" name="statut_check" data-onstyle="outline-primary" data-offstyle="outline-secondary" onchange="toggleCheckbox('form_check<?= $i ?>')">
@@ -51,7 +58,8 @@ $societeManager = new SocieteManager;
 
                         </td>
                     </tr>
-                <?php } ?>
+                    <?php }
+                    } ?>
             </tbody>
         </table>
         <div>

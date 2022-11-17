@@ -2,6 +2,7 @@
 class Banque
 {
     private $id;
+    private $nom;
     private $nomCourt;
     private $adresse;
     private $cp;
@@ -30,6 +31,12 @@ class Banque
         $id = (int)$id;
         if ($id > 0) {
             $this->id = $id;
+        }
+    }
+    public function setNomBanque($nom)
+    {
+        if (is_string($nom)) {
+            $this->nom = $nom;
         }
     }
     public function setCourtNomBanque($nom_court)
@@ -73,6 +80,10 @@ class Banque
     public function id()
     {
         return $this->id;
+    }
+    public function nom()
+    {
+        return $this->nom;
     }
     public function nomCourt()
     {

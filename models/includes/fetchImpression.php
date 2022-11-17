@@ -42,17 +42,20 @@ if (isset($_POST['search'])) {
 }
 
 if (isset($_POST['deleteRow']) && !empty($_POST['deleteRow'])) {
-
-    try {
-        $sql = "DELETE  FROM facture WHERE   `numeroFacture`=:numero_facture";
-        $query = $_bdd->prepare($sql);
-        $query->bindValue(':numero_facture', $_POST['deleteRow'], PDO::PARAM_STR);
-        $query->execute();
-        $query->closeCursor();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        die();
-    }
+   try {
+       $sql = "DELETE  FROM facture WHERE   `numeroFacture`=:numero_facture";
+       $query = $_bdd->prepare($sql);
+       $query->bindValue(':numero_facture', $_POST['deleteRow'], PDO::PARAM_STR);
+       $query->execute();
+    //    $query->closeCursor();
+    //    if(isset($_POST['searchValue']) && !empty($_POST['searchValue'])){
+    //    }
+    require("getCountRowImpression.php");
+   } catch (PDOException $e) {
+       echo "Error: " . $e->getMessage();
+       die();
+   }
+ 
 }
 if (isset($_POST['societes'])) {
 
@@ -123,3 +126,47 @@ if (isset($_POST['page'], $_POST['query'])&& !empty($_POST['page']) && !empty($_
         die();
     }
 }
+
+
+echo('
+<thead>
+                 <tr>
+                     <th scope="col">
+
+                         <input type="checkbox" name="selectAll" id="selectAll" class="selectAll">
+
+                     </th>
+                     <th scope="col">Id</th>
+                     <th scope="col">Numero </th>
+                     <th scope="col">Date</th>
+                     <th scope="col">Societe</th>
+                     <th scope="col">Banque</th>
+                     <th scope="col">Montant</th>
+                     <th scope="col"> </th>
+                 </tr>
+             </thead>
+<tr>
+    <td > <input  class="checkitem" type="checkbox" name=checkitems[] value="d"></td>
+    <td  scope="row"><p class="mx-2"><?= (1) ?></p></td>
+    <td value="d>"><input class="td-input row" value="d"type="text" id="numeroFacture" name="numeroFacture" ></td>
+    <td value="<d?>"><input class="td-input"value="d" type="text" id="dateFacture" name="dateFacture"></td>
+    <td value="x">
+        <select name="fkSociete"class="td-input">
+            <option selected value="">ddd</option>
+           
+        </select>
+    </td>
+    <td >"sdsydgsdgsdgsgdsd" </td>
+    <td value="d>">
+        <input class="w-100  bg-olive td-input" type="number" step="0.01" min=1 id="m" name="montantFacture">
+    </td>
+    <td>
+        <button type="button" class="btn btn-danger deleteButton" style="height: 60%;" value="s">Delete</button>
+    </td>
+</tr>
+
+
+
+
+
+');

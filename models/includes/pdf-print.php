@@ -16,8 +16,8 @@ ob_start();
 
     <div class="container" id="chequeDiv" style="position: relative;height: 40%;width: 100% ;left:0;">
 
-        <img id="image" src="assets/img/cheque.webp" alt="sdd" style="width: 100%;position: absolute;
-    top: 55%;">
+         <img id="image" src="assets/img/cheque.webp" alt="sdd" style="width: 100%;position: absolute;
+    top: 55%;"> 
         <h4 id="montantLettres" style="width: 100%;position: absolute;left:74%; top: 61%;">
             <?= 15 ?>
         </h4>
@@ -46,8 +46,8 @@ $content = ob_get_clean();
 try {
 
     $html2pdf->writeHTML($content);
-    $html2pdf->output('t.pdf');
-    $x = $html2pdf->pdf->IncludeJS('print(true)');
+    // $html2pdf->output('t.pdf');
+     $html2pdf->pdf->IncludeJS('print()');
     $html2pdf->output('cheque.pdf');
 } catch (Html2PdfException $e) {
     echo $e->getMessage();
