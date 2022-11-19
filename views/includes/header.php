@@ -36,13 +36,13 @@
                         <a href="<?= URL ?>" class="nav-link">Accueil</a>
                         <!-- <hr class="hr_nav"> -->
                     </li>
-                    <li class="nav-item "><a href="<?= URL ?>impression" class="nav-link">Impression</a>
+                    <li class="nav-item "><a href="impression" class="nav-link">Impression</a>
                     </li>
-                    <li class="nav-item "><a href="<?= URL ?>signature" class="nav-link">Signature</a>
+                    <li class="nav-item "><a href="signature" class="nav-link">Signature</a>
                     </li>
-                    <li class="nav-item "><a href="<?= URL ?>expedition" class="nav-link">Expedition</a>
+                    <li class="nav-item "><a href="expedition" class="nav-link">Expedition</a>
                     </li>
-                    <li class="nav-item "><a href="<?= URL ?>historique" class="nav-link">Historique</a>
+                    <li class="nav-item "><a href="historique" class="nav-link">Historique</a>
                     </li>
                 </ul>
 

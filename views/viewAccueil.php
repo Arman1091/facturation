@@ -52,7 +52,7 @@ if (!empty($_POST)) {
         <div class="col-md-4 col-sm-7">
             <div class="container-flud">
                 <div class="row">
-                    <form id="factureForme" method="post">
+                    <form id="factureForme" class="factureForme" method="post">
 
                         <div class="form-group mt-2">
                             <label class="text-danger" for="selectSociete">Societe</label>
@@ -65,11 +65,11 @@ if (!empty($_POST)) {
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="form-group mt-2">
+                        <div class="form-group mt-2" >
                             <label class="text-danger" class="d-block" for="montant">Montant</label>
                             <input class="form-control" type="hidden" id="montantLettres" name="montantLettres" value="x">
                             <!-- voir apres********* -->
-                            <input class="w-100 form-control bg-olive" type="number" step="0.01" min=1 id="montant" name="montant" onchange="doConvertLettres()">
+                            <input class="w-100 form-control " type="number" step="0.01" min=1 id="montant" name="montant" onchange="doConvertLettres()">
                         </div>
                         <div class=" form-group mt-2">
                             <label class="text-danger" for="numeroFacture">N°FACT</label>
@@ -78,7 +78,7 @@ if (!empty($_POST)) {
                         </div>
                         <div class=" form-group mt-2 ">
                             <label class="text-danger" for="dateFacture">Date de Facture</label>
-                            <input class="form-control" type="date" id="dateFacture" name="dateFacture">
+                            <input class="form-control" type="date" id="dateFacture"  max=<?= date('d/m/y') ?> name="dateFacture">
                         </div>
                         <div>
                             <span id="erreurForm"class="text-center text danger"> </span>
@@ -126,9 +126,9 @@ if (!empty($_POST)) {
                             <p class="text-start" style="font-size: 8px;line-height: 0.1em;">N° de compte </p>
                             <p style="line-height: 0.1em; margin-top:-0.5em !important">xxxxxxxxxxxxxxxxxxx</p>
                             <div>
-                                <p style="line-height: 0.5em;">ETOILS SECOURS</p>
-                                <p style="line-height: 0.5em;">18 RUE DE LA BANQUE</p>
-                                <p style="line-height: 0.5em;">87000 LIMOGES</p>
+                                <p class="banque-text"style="line-height: 0.5em;">ETOILS SECOURS</p>
+                                <p class="banque-text"style="line-height: 0.5em;">18 RUE DE LA BANQUE</p>
+                                <p class="banque-text"style="line-height: 0.5em;">87000 LIMOGES</p>
 
                             </div>
                         </div>
@@ -174,8 +174,8 @@ if (!empty($_POST)) {
         </div>
     </div>
     <div class="text-center mt-3">
-        <button class="btn bg-primary " type="submit" form="factureForme" name="saveAndPrint" value="0">Submit</button>
-        <button class="btn bg-secondary mx-1" type="button"  value="1" onclick="printTrigger()">Print</button>
+        <button class="btn bg-primary " type="submit" form="factureForme" name="saveAndPrint" value="0">Enregistrer</button>
+        <button class="btn bg-secondary mx-1" type="button"  value="1" onclick="printTrigger()">Imprimerie</button>
     </div>
  <div>
 <iframe id="iFramePdf" src="models/includes/pdf-print.php" style="display: none;"></iframe>

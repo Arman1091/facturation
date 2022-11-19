@@ -7,9 +7,9 @@
 body{
     min-height: 100vh;
 }
-#selectBank, #selectSociete{
+#montant, #selectSociete, #numeroFacture, #dateFacture{
     box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
-background-color:#ffe4c47f;
+     background:#ffe4c47f;
 }
 
 .cheque-row{
@@ -151,4 +151,11 @@ background-color:#ffe4c47f;
     margin-top: -0.8em;
     font-size: 1.2em;
     margin-left: 15px;
+  }
+  #changeMsgDiv{
+    display: none;
+  }
+
+  .banque-text{
+    font-size: 10px;
   }

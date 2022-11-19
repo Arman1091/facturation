@@ -18,35 +18,33 @@ abstract class Model
         }
         return self::$_bdd;
     }
-
+//récupérer tout les élements
     protected function getAll($table, $obj)
     {
-        // self::setBdd();
         $var = [];
         $req = self::$_bdd->prepare('SELECT * FROM ' . $table);
-        // . ' ORDER BY id DESC'
         $req->execute();
         $data = $req->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($data as $value) {
-
-            $var[] = new  $obj($value);
+        if (!empty($data)) {
+            foreach ($data as $value) {
+                $var[] = new  $obj($value);
+            }
+            return $var;
         }
-
-        return $var;
         $req->closeCursor();
     }
+    //récupérer l'élement par id
     protected function getById($table, $obj, $id)
     {
-        // self::setBdd();
         $var = [];
         $req = self::$_bdd->prepare('SELECT * FROM ' . $table . "WHERE `id`=:id");
         $req->bindValue(':id', $id, PDO::PARAM_INT);
         $req->execute();
         $data = $req->fetch(PDO::FETCH_ASSOC);
-        $var = new $obj($data);
-        return $var;
-
+        if (!empty($data)) {
+            $var = new $obj($data);
+            return $var;
+        }
         $req->closeCursor();
     }
 }

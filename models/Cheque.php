@@ -112,8 +112,8 @@ class Cheque
             $req->bindValue(':NFact', $this->fkFacture(), PDO::PARAM_STR);
             $req->execute();
             $data = $req->fetch(PDO::FETCH_ASSOC);
-           if(isset($data)){
-            $banque = new Facture($data);
+           if(isset($data)){ //vierification si il'y a du fcture avec ce numero
+            $banque = new Facture($data);//creation un objet avec les infos $data
             return $banque;
            }
         } catch (PDOException $e) {

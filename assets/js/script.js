@@ -59,14 +59,13 @@ function doConvertLettres(){
 // checkAll.addEventListener('change', function(){
 //     alert("yg");
 // })
-let v = 0;
-var checkboxes = document.querySelectorAll("input[type='checkbox']");
 $('.selectAll').change(function(){
   alert("sdsd");
     // if(tr[i].style.display="none";)
+var checkboxes = document.querySelectorAll("input[type='checkbox']");
 if($(this).prop("checked")){
     checkboxes.forEach(function(checkbox){
-        if(checkbox.style.display != "none"){
+        if(checkbox.checked != "true"){
             checkbox.checked=true;
         }
     });
@@ -75,40 +74,23 @@ if($(this).prop("checked")){
         checkbox.checked=false;});
 }
   //  $('.checkitem').prop("checked",$(this).prop("checked"));
-})
-let checked = 0;
-let filtre_checked=0;
-checkboxes.forEach(function(checkbox){
-    if(checkbox.style.display != "none"){
-        checkbox.addEventListener("change", function () {
-     
-            if(this.checked==false){
-                $('.selectAll').prop("checked", false);
-                if(document.getElementById('search').value){
-                checked--;
-                }
-            }else {
-            if(!document.getElementById('search').value){
-                filtre_checked=0;
-                checked = 0;
-                console.log($(".checkitem:checked").length);
-                console.log("ds");
-                if($(".checkitem:checked").length == $(".checkitem").length){
-                  $('.selectAll').prop("checked", true);}
-            }else {
-                checked++;
-                alert( checked);
-                if(checked == filtre_checked){
-       
-                    $('.selectAll').prop("checked", true);
-                }
-            }
-               
-            }
-        })
-        
-    }
+});
 
+document.querySelectorAll("input[type='checkbox']").forEach(function(checkbox){
+    checkbox.addEventListener("change", function () {
+       if(this.checked==false){
+           $('.selectAll').prop("checked", false);
+           if(document.getElementById('search').value){
+               checked--;
+            }
+        }else {
+            if(!document.getElementById('search').value){
+                if($(".checkitem:checked").length == $(".checkitem").length){
+                  $('.selectAll').prop("checked", true);
+                }   
+            }
+        }
+   });
 });
 // $(".checkitem").change(function(){
     
@@ -174,12 +156,9 @@ $("#selectSociete").on('change', function(){
         url:'models/includes/getBanque.php',
         type:'POST',
         data:'change='+ idSociete,
-        beforeSend:function(){
-        console.log("woeking on");
-        },
         success:function(data){
-        let parseDate= JSON.parse(data);
-        remplireBaqueCase(parseDate);
+            let parseDate= JSON.parse(data);
+            remplireBaqueCase(parseDate);
         
         }
     });
@@ -207,19 +186,20 @@ function remplireSocieteCase(societe){
  }
 
  $('#factureForme').on('change','#numeroFacture',function(event){
+    // console.log( $('#factureForme'));
     let numeroFacture = this.value;
     let errMesaage = document.getElementById("erreurMessageFacture");
     errMesaage.innerHTML="";
      $.ajax(
          {
-         url:'models/includes/checkFactureExistence.php',
+            url:'models/includes/fetchFunctions.php',
          type:'POST',
          data:{
             'chackFacture': numeroFacture,
         },
          success:function(msg){
             if(msg !==""){
-                
+                alert("sdd")
                 // console.log(event[preventDefault()]);
                   event.preventDefault();
                 errMesaage.innerHTML = msg;
@@ -229,82 +209,57 @@ function remplireSocieteCase(societe){
      });
 
 });
-// if(document.forms["factureForme"]){
-//     //appele quand on click la button submit
-//     //$('#factureForme').on('click','.deleteButton',function(){
-//       document.forms["factureForme"].addEventListener("submit", function(e){
-//         alert("sj");
-//           var err;
-//           let inputs =document.getElementsByTagName("input");
-//           console.log(inputs); 
-//       for(var i=0; i<inputs.length; i++){
-      
-//               if(inputs[i].value===''){
-//                   err = "Veuillez renseigner tout les champs";
-//               break;
-//           } else {
-//                   document.getElementById("err").innerHTML = "";
-//           }
-//       }
-//       alert("ssdj");
-//       if((err)){
-//         alert("sdj");
-//         e.preventDefault();
-//           document.getElementById("erreurForm").value = err;    
-//       }
-//       });
-//   };
-
-//  if(($("#formImpression"))){
-
-//     console.log($("#formImpression"));
-//  }
 
 
+//supprimer plusieurs d'un coup
+$("#formImpression").on('click','#deleteManyImpressions',function(event){
+    var cheeckItemss = $(".checkitem:checked");
+    if(cheeckItemss.length == 0) {
+        document.getElementById('changeMsgDiv').style.backgroundColor = "red";
+        document.getElementById("changeMsg").innerHTML="choisissez au mois un row";
+        document.getElementById('changeMsgDiv').style.display = "block";
+        setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
+    } else{
+        let nFacturs = [];
+        let searchValue = document.getElementById('search').value;
+        for(j=0; j < cheeckItemss.length; j++){
+            nFacturs[j] = cheeckItemss[j].value;
+        }
+        $.ajax(
+             {
+             url:'models/FatchImpressionManager.php',
+             type:'POST',
+             data:{
+                'deleteCheckItems': nFacturs,
+                'searchValue':((searchValue !="") ? searchValue : ""),
+            },
+             success:function(data){
+                if(confirm("Vous voulez supprimer")){
+                    let table = $("#tableImression");
+                    table.html(data);
+                }
+             }
+         });
+    }
+});
 
-
-//  $(".deleteButton").click(function() { 
-//     console.log(this.value);
-//     alert('sd');
-//          $.ajax(
-//          {
-//          url:'models/includes/fetchImpression.php',
-//          type:'POST',
-//          data:'deleteRow='+ this.value,
-//          beforeSend:function(){
-//          console.log("woeking on");
-//          },
-//          success:function(e){
-//             if(confirm("Vous voulez supprimer")){
-//                 window.location.href="impression";
-//             }
-//          }
-//      });
-//  });
- $('table').on('click','.deleteButton',function(){
+ $(".table").on('click','.deleteButton',function(){
     let searchValue = document.getElementById('search').value;
-    let tbody = $('table');
-  
-     var currentRow = $(this).closest("tr");
-     var deleteRow = currentRow.find(".row")[0].value;
+    let table = $(".table");  
+    var currentRow = $(this).closest("tr");
+    var deleteRow = currentRow.find(".row")[0].value;
  
       $.ajax(
       {
-           url:'models/includes/fetchImpression.php',
+           url:'models/FatchImpressionManager.php',
            type:'POST',
            data:{
               'deleteRow': deleteRow,
               'searchValue':((searchValue !="") ? searchValue : ""),
           },
-           beforeSend:function(){
-           console.log("woeking on");
-           },
            success:function(e){
-         console.log(e);
-                //  //  currentRow.remove();
-                //  //  // window.location.href="impression";
-                //  tbody.innerHTML="";
-                //  tbody.html(e);
+             table.innerHTML="";
+             table.html(e);
           
            }
       });
@@ -312,30 +267,61 @@ function remplireSocieteCase(societe){
 
 
  $('table').on('change','.td-input',function(){
+
+    var self = this;
     var colName = this.name;
     var value = this.value;
     var currentRow = $(this).closest("tr");
     var nFact = currentRow.find(".checkitem")[0].value;
+    // vérification l'existence du numero facture
+    if (this.id = "numeroFacture"){
+        $.ajax(
+            {
+            url:'models/includes/fetchFunctions.php',
+            type:'POST',
+            data:{
+               'chackFacture': this.value,
+           },
+            success:function(msg){
+               if(msg !==""){  
+                //  exist
+                document.getElementById('changeMsgDiv').style.backgroundColor = "red";
+                document.getElementById("changeMsg").innerHTML=msg;
+                self.value = nFact;
+               } else{
+                changeImpressionRow(nFact,colName,value ) 
+               }
+               document.getElementById("changeMsgDiv").style.display="block";
+               //afficher le message 600ms
+                setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
+                   
+            }
+        });
+    } else {
+        changeImpressionRow(nFact,colName,value) 
+    }
+})
 
+function changeImpressionRow(nFact, colName, value){
+    let searchValue = document.getElementById('search').value;
       $.ajax(
           {
-          url:'models/includes/fetchImpression.php',
+          url:'models/FatchImpressionManager.php',
           type:'POST',
           data:{
               'numeroFacture': nFact,
               'editCol':colName,
               'editValue':value,
+              'searchValue':((searchValue !="") ? searchValue : ""),
           },
-          beforeSend:function(){
-          console.log("woeking on");
-          },
-          success:function(e){
-
-                //   window.location.href="impression";
-
+          success:function(data){
+            let table = $("#tableImression");
+            table.html(data);
           }
+    
       });
-})
+      
+}
 
 
 $('.search').on('input',function(){
@@ -343,114 +329,22 @@ $('.search').on('input',function(){
 
      $.ajax(
          {
-        url:'models/includes/fetchImpression.php',
+        url:'models/FatchImpressionManager.php',
         type:'POST',
         data:'search='+ this.value,
         beforeSend:function(){
         console.log("woeking on");
         },
         success:function(data){
-           // let parseDate= JSON.parse(data);
-          //  getSocietes(parseDate);
+            let table = $("#tableImression");
+            table.html(data);
       
          }
      });
+
+     
  });
- function getSocietes(data){
-    $.ajax(
-        {
-       url:'models/includes/fetchImpression.php',
-       type:'POST',
-       data:'societes',
-       beforeSend:function(){
-       console.log("woeking on");
-       },
-       success:function(societes){
-           let parseSocietes= JSON.parse(societes);
-           creeTable(data,parseSocietes); 
-        }
-    });
- }
- function creeTable(data, societes){
-   var tbody= document.getElementsByClassName("tbody")[0];
-   tbody.innerHTML="";
-   var resultat="" ;
-//     societes.map(function(element){
-// //    $('#my_table').append(`<tr>
-// //         <td>${row.name}</td>
-// //         <td>${row.surname}</td>
-// //         <td>${row.age}</td>
-// //     </tr>`);
-// //   });
-//    data.map(function(element){
-//   resultat += `  <tr>
-//   <td > <input  class="checkitem" type="checkbox" name=checkitems[] value="${element['numeroFacture']}" ></td>
-//   <td scope="row"><p>1</p></td>
-//   <td><input class="td-input row"  value="${element['numeroFacture']}" type="text" id="numeroFacture" name="numeroFacture" ></td>
-//   <td><input class="td-input" value="${element['dateFacture']}"  type="date" id="dateFacture" name="dateFacture"></td>
-//   <td>
-//       <select name="fkSociete"class="td-input">
-//       <option selected value="">${element['nomSociete']}</option>`+
-//       societes.map(function(societe){+`
-//         <option >22</option>`+
-//       });
-      
-//        +`</select>
-//   </td>
-//   <td > ${element['nomBanque']}</td>
-//   <td>
-//       <input class="w-100  bg-olive td-input" type="number" step="0.01" min=1 id="m" name="montantFacture"  value="${element['montantFacture']}" >
-//   </td>
-//   <td>
-//       <button type="button" class="btn btn-danger deleteButton" style="height: 60%;"  value="${element['numeroFacture']}">Delete</button>
-//   </td>
-// </tr>`;
-// });
-// tbody.innerHTML=resultat;
-data.map(function(element){
-const row = document.createElement("tr");
 
-  
-    // Create a <td> element and a text node, make the text
-    // node the contents of the <td>, and put the <td> at
-    // the end of the table row
-    const cell1 = document.createElement("td");
-    const cell2 = document.createElement("td");
-    const cell3 = document.createElement("td");
-    const cell4 = document.createElement("td");
-    const cell5 = document.createElement("td");
-    const cell6 = document.createElement("td");
-    const cell7 = document.createElement("td");
-    const cell8 = document.createElement("td");
-    cell1.innerHTML=`<input  class="checkitem" type="checkbox" name=checkitems[] value="${element['numeroFacture']}" >`;
-    cell2.innerHTML = 1;
-    cell3.innerHTML=`<input class="td-input row"  value="${element['numeroFacture']}" type="text" id="numeroFacture" name="numeroFacture" >`;
-    cell4.innerHTML=`<input class="td-input" value="${element['dateFacture']}"  type="date" id="dateFacture" name="dateFacture">`;
-    let select = document.createElement("select");
-    let selectedOption = document.createElement("option");
-    selectedOption.innerHTML=` <option selected value="">${element['nomSociete']}</option>`;
-    select.appendChild(selectedOption);
-    societes.map(function(societe){
-        let option = document.createElement("option");
-        option.innerHTML=`<option value="${societe['id']}">${societe['nomSociete']} </option>`;
-        select.appendChild(option);
-    });
-    cell5.appendChild(select)
-    cell6.innerHTML=`${element['nomBanque']}`;
-    cell7.innerHTML = `<button type="button" class="btn btn-danger deleteButton" style="height: 60%;"  value="${element['numeroFacture']}">Delete</button>`;
-
-    row.appendChild(cell1);
-    row.appendChild(cell2);
-    row.appendChild(cell3);
-    row.appendChild(cell4);
-    row.appendChild(cell5);
-    row.appendChild(cell6);
-    row.appendChild(cell7);
-    row.appendChild(cell8);
-    tbody.appendChild(row);
-  })
-  // add the row to the end of the table body
-}
 
 function load_data(page, query=''){
     $.ajax(
