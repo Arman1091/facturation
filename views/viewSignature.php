@@ -2,16 +2,18 @@
 $societeManager = new SocieteManager;
 ?>
 <div class="container">
-    <form action="" method="post">
-        <table class="table table-sm">
+<div class="d-flex justify-content-end mt-3 mx-3">
+            <div id="serachForm">
+                <label class="mx-2" for="site-search"><strong>Search avec Societe/N_fact</strong></label>
+
+                <input class="sitesearch" type="search" id="sitesearch" name="site-search">
+</div>
+
+
+        </div>
+        <table class="table table-sm" id="tableSignature">
             <thead>
                 <tr>
-                    <th scope="col">
-
-                        <input type="checkbox" name="selectAll" id="selectAll" class="selectAll">
-
-                    </th>
-                    <th scope="col">Id</th>
                     <th scope="col">N°Facture</th>
                     <th scope="col">Date Facture</th>
                     <th scope="col">Societe</th>
@@ -35,26 +37,26 @@ $societeManager = new SocieteManager;
                     
 
                 ?>
-                    <tr>
-                        <td name="y<?= $i ?>"><input class="checkitem" type="checkbox" name=checkitems[] value="<?= $factures[$i]->numero()?>"></td>
-                        <th scope="row"><?= ($i + 1) ?></th>
+                    <tr class= "tr<?= $i ?>">
                         <td><?= $factures[$i]->numero()?></td>
                         <td><?= $factures[$i]->date()?></td>
                         <td><?= $societe->nom() ?></td>
                         <td><?= $banque->nom() ?></td>
                         <td><?= $factures[$i]->montant()?></td>
-                        <td><input class="td-input " value=""type="text" id="numeroCheque" name="numeroCheque" ></td>
-                        <td><input class="td-input"value="" type="date" id="dateCheque" name="dateCheque"></td>
                         <td>
-                        
-                                <input type="checkbox" id="tt" data-toggle="toggle" name="statut_check" data-onstyle="outline-primary" data-offstyle="outline-secondary" onchange="toggleCheckbox('form_check<?= $i ?>')">
+                            <input class="td-input" type="text" id="numeroCheque" name="numeroCheque" >
+                            <small class="text-danger"></small>
+                        </td>
+                        <td><input class="td-input"value="" type="date" class="dateCheque" name="dateCheque"></td>
+                        <td>
+                                <input type="checkbox" class="checkBoxSignature" data-toggle="toggle" name="statut_check" data-onstyle="outline-primary" data-offstyle="outline-secondary" onchange="toggleCheckbox('tr<?= $i ?>')">
                     
                         </td>
                         <td class="d-flex">
                           
                     
                                 <button type="submit" class="btn btn-danger">Delete</button>
-             
+
 
                         </td>
                     </tr>
@@ -62,9 +64,9 @@ $societeManager = new SocieteManager;
                     } ?>
             </tbody>
         </table>
-        <div>
-            <button type="submit" class="btn btn-primary" name="deleteOrPrint" value=0>Signer</button>
-            <button type="submit" class="btn btn-danger" name="deleteOrPrint" value=1>Delete</button>
-        </div>
-    </form>
+        
+        <div class="mt-3"id="msgDiv">
+                 <h6 class="p-2" id="msg"></h6>
+         </div>
+
 </div>

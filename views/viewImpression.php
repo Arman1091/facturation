@@ -11,7 +11,7 @@
                         $factureManager->deleteFacture($id);
                         //require "controllers/deleteFacture.php";
                     }
-                    header("Location:" . URL . "impression");
+                    header("Location:impression");
                 } else {
                     var_dump("dssd");
                     die;
@@ -48,7 +48,7 @@
  </div>
  <div class="container">
      <form method="post" name="formImpression" id="formImpression">
-         <table  class="table"id="tableImression">
+         <table  class="table" id="tableImression">
              <thead>
                  <tr>
                      <th scope="col">
@@ -106,14 +106,15 @@
                     } ?>
 
              </tbody>
-             <div class="mt-3"id="changeMsgDiv">
-                 <h6 class="p-2" id="changeMsg"></h6>
-            </div>
          </table>
+         <div class="mt-3"id="changeMsgDiv">
+                 <h6 class="p-2" id="changeMsg"></h6>
+         </div>
          <div>
              <button type="button" id="deleteManyImpressions" class="btn btn-danger" name="deleteOrPrint" value=1>Delete</button>
              <button type="button" class="btn btn-primary" name="printManyImpressions" value=0>Print</button> 
          </div>
 
      </form>
+     
 </div>

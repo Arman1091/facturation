@@ -8,26 +8,14 @@ class ControllerExpedition
     public function __construct($url)
     {
 
-        if (isset($url)) {
-
-            if (count((array)$url) > 1) {
-
-                throw new Exception('Page introuvable');
-            } else {
-
-                $this->envois();
-            }
-        } else {
-
-            $this->envois();
-        }
+        $this->expedition();
     }
 
 
-    public function envois()
+    public function expedition()
     {
         $this->chequeManager = new ChequeManager;
-        $cheques = $this->chequeManager->getChequesAttantes("statutChequeSignature",0);
+        $cheques = $this->chequeManager->getChequesAttantes("statutChequeSignature",1);
         $this->view = new View('Expedition');
         $this->view->generate(array('cheques' => $cheques));
     }

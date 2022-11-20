@@ -8,24 +8,11 @@ class ControllerSignature
 
     public function __construct($url)
     {
-
-        if (isset($url)) {
-
-            if (count((array)$url) > 1) {
-
-                throw new Exception('Page introuvable');
-            } else {
-
-                $this->signes();
-            }
-        } else {
-
-            $this->signes();
-        }
+        $this->signature();
     }
 
 
-    public function signes()
+    public function signature()
     {
 
         $this->factureManager = new FactureManager;

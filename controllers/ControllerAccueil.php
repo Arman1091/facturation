@@ -9,23 +9,12 @@ class ControllerAccueil
 
     public function __construct($url)
     {
-        if (isset($url)) {
+        $this->accueil();
 
-            if (count((array)$url) > 1) {
-
-                throw new Exception('Page introuvable');
-            } else {
-
-                $this->societes();
-            }
-        } else {
-
-            $this->societes();
-        }
     }
 
 
-    private function societes()
+    private function accueil()
     {
         $this->societeManager = new SocieteManager;
         $societes = $this->societeManager->getSocietes();
@@ -34,6 +23,5 @@ class ControllerAccueil
         $this->view->generate(array(
             'societes' => $societes,
         ));
-        // require_once 'views/viewsAccuil.php';
     }
 }

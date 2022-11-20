@@ -1,6 +1,6 @@
 <?php
-
 if (!empty($_POST)) {
+    // verfication que tout les cases sont exists
     if (
         isset(
             $_POST['societe'],
@@ -11,6 +11,7 @@ if (!empty($_POST)) {
         !empty($_POST['societe'])  && !empty($_POST['numeroFacture']) && !empty($_POST['montant']) &&
         !empty($_POST['dateFacture'])
     ) {
+        //récupération les data en protégeant
         if (!filter_var($_POST['societe'], FILTER_VALIDATE_INT)) {
             die("SocieteId est incorrect");
         }
@@ -24,22 +25,23 @@ if (!empty($_POST)) {
         $date_facture = htmlspecialchars(strip_tags($_POST['dateFacture']));
         $statut = 0;
 
-        if ($_POST['saveAndPrint']) {
-             require_once('models/includes/pdf-print.php');
-            $statut = 1;
+        if (isset($_POST['enregistrer'])) {
+
+            $statut = 0;
+            $instance = new Facture([
+                "dateFacture" => $date_facture,
+                "fkSociete" => $societe_id,
+                "numeroFacture" =>  $numero_facture,
+                "montantFacture" => $montant,
+                "montantLettresFacture" => $montant_lettres,
+                "statutFacture" => $statut
+            ]);
+    
+            $factureManager = new FactureManager;
+            $factureManager->newFacture($instance);
+        } else{
+            //require_once('models/includes/pdf-print.php');
         }
-
-        $instance = new Facture([
-            "dateFacture" => $date_facture,
-            "fkSociete" => $societe_id,
-            "numeroFacture" =>  $numero_facture,
-            "montantFacture" => $montant,
-            "montantLettresFacture" => $montant_lettres,
-            "statutFacture" => $statut
-        ]);
-
-        $factureManager = new FactureManager;
-        $factureManager->newFacture($instance);
     } else {
         echo ("Le formulaire est incomplete");
     }
@@ -56,7 +58,7 @@ if (!empty($_POST)) {
 
                         <div class="form-group mt-2">
                             <label class="text-danger" for="selectSociete">Societe</label>
-                            <select class="form-select" name="societe" id="selectSociete">
+                            <select class="form-select item-formuler" name="societe" id="selectSociete">
                                 <option selected value="">choissiez la societe</option>
                                 <?php for ($i = 0; $i < count($societes); $i++) { ?>
 
@@ -66,19 +68,19 @@ if (!empty($_POST)) {
                             </select>
                         </div>
                         <div class="form-group mt-2" >
-                            <label class="text-danger" class="d-block" for="montant">Montant</label>
-                            <input class="form-control" type="hidden" id="montantLettres" name="montantLettres" value="x">
+                            <label class="text-danger" class="d-block" for="montant" >Montant</label>
+                            <input class="form-control " type="hidden" id="montantLettres" name="montantLettres" value="x">
                             <!-- voir apres********* -->
-                            <input class="w-100 form-control " type="number" step="0.01" min=1 id="montant" name="montant" onchange="doConvertLettres()">
+                            <input class="w-100 form-control item-formuler" type="number" step="0.01" min=1 id="montant" name="montant" onchange="doConvertLettres()">
                         </div>
                         <div class=" form-group mt-2">
-                            <label class="text-danger" for="numeroFacture">N°FACT</label>
-                            <input class=" form-control" type="text" id="numeroFacture" name="numeroFacture" style="width: 100%">
+                            <label class="text-danger" for="numeroFacture">N°Facture</label>
+                            <input class=" form-control item-formuler" type="text" id="numeroFacture" name="numeroFacture" style="width: 100%">
                             <span class="text-danger" id="erreurMessageFacture"></span>
                         </div>
                         <div class=" form-group mt-2 ">
                             <label class="text-danger" for="dateFacture">Date de Facture</label>
-                            <input class="form-control" type="date" id="dateFacture"  max=<?= date('d/m/y') ?> name="dateFacture">
+                            <input class="form-control item-formuler" type="date" id="dateFacture"  max=<?= date('d/m/y') ?> name="dateFacture">
                         </div>
                         <div>
                             <span id="erreurForm"class="text-center text danger"> </span>
@@ -92,12 +94,12 @@ if (!empty($_POST)) {
             <div class="row cheque-row  mt-3  p-2">
                 <div class="col-sm-8">
                     <div class="mt-2">
-                        <img id="iconBanque" src="z" alt="" style="width: 25%; ">
+                        <img id="iconBanque" src="" alt="" style="width: 25%; ">
                     </div>
                     <div id="cheque_lines_div" class="mt-3">
                         <ul class=" list-unstyled">
                             <li>
-                                <p class="montant-horizontal-line1">Payez contre non endossable <span id="somme"> ******************************* </span>
+                                <p class="montant-horizontal-line1">Payez contre non endossable <span id="somme"> **********</span>
                                     </br>
                                     Sauf au profit d'une banque ou d'un établissement assimilé<small class="text-danger text-somme-lettres text-end">somme en tout lettres</small> </p>
                             </li>
@@ -174,8 +176,8 @@ if (!empty($_POST)) {
         </div>
     </div>
     <div class="text-center mt-3">
-        <button class="btn bg-primary " type="submit" form="factureForme" name="saveAndPrint" value="0">Enregistrer</button>
-        <button class="btn bg-secondary mx-1" type="button"  value="1" onclick="printTrigger()">Imprimerie</button>
+        <button class="btn bg-primary " type="submit" form="factureForme" name="enregistrer" value="1">Enregistrer</button>
+        <button class="btn bg-secondary mx-1" type="button"   onclick="printCheque()">Imprimer</button>
     </div>
  <div>
 <iframe id="iFramePdf" src="models/includes/pdf-print.php" style="display: none;"></iframe>

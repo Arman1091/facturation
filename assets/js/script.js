@@ -4,22 +4,19 @@ function doConvert (){
     let montantLettres = document.querySelector('#montantLettres');
 
 
-    let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
-    'eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
-    let tenth = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
+    let oneToTwenty = ['','un ','deux ','trois ','quatre ', 'cinq ','six ','sept ','huit ','neuf ','dix ',
+    'onze ','douze ','treize ','quatorze ','quinze ','seize ','dix-sept ','dix-huit ','dix-neuf '];
+    let tenth = ['', '', 'vingt','trent','quarante','cinquante', 'soixante','soixante-dix','quatre-vingts','quatre-vingts-dix'];
 
     if(numberInput.toString().length > 7) return myDiv.value = 'overlimit' ;
-    //console.log(numberInput);
-    //let num = ('0000000000'+ numberInput).slice(-10).match(/^(\d{1})(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
   let num = ('0000000'+ numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    console.log(num);
     if(!num) return;
 
     let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}` )+' million ' : ''; 
   
-    outputText +=num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}` )+'hundred ' : ''; 
-    outputText +=num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`)+' thousand ' : ''; 
-    outputText +=num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) +'hundred ': ''; 
+    outputText +=num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}` )+'cent ' : ''; 
+    outputText +=num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`)+' mille ' : ''; 
+    outputText +=num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) +'cent ': ''; 
     outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : ''; 
 
     sommeLettres.innerHTML = outputText;
@@ -29,6 +26,7 @@ function doConvert (){
 
 
 function doConvertLettres(){
+    alert("dd");
     let numberInput = document.querySelector('#montant').value ;
     let sommeLettres = document.querySelector('#sommeCheque');
     sommeLettres.innerHTML =numberInput;
@@ -92,35 +90,7 @@ document.querySelectorAll("input[type='checkbox']").forEach(function(checkbox){
         }
    });
 });
-// $(".checkitem").change(function(){
-    
-//     if($(this).prop("checked") == false){
-//         $('.selectAll').prop("checked", false);
-//     }
-//   if($(".checkitem").css('display') != "none" ){
-//    console.log($(".checkitem").css('display'));
-//   }
-//     if($(".checkitem:checked").length == $(".checkitem").length){
-//         $('.selectAll').prop("checked", true);
 
-//     }
-   
-// })
-
-
-
-
-
-
-//  function f(){
-
-//    let x= document.getElementsByTagName('form');
-//    let i ;
-//    for(i=0;i<x.length; i++){
-//     x[i].submit();
-//    }
-
-//  }
 function description(rowId){
     document.getElementById("rowDescription").value = rowId;
     document.getElementById('descriptionForm').style.display = "block"
@@ -149,8 +119,6 @@ $("#selectSociete").on('change', function(){
     let societe = this.options[this.selectedIndex].text;
     remplireSocieteCase(societe);
     let idSociete = this.value;
-   
- 
     $.ajax(
         {
         url:'models/includes/getBanque.php',
@@ -164,44 +132,41 @@ $("#selectSociete").on('change', function(){
     });
 
 });
+
 function remplireSocieteCase(societe){
     document.getElementById('societe-row').innerHTML =societe;
 }
- function remplireBaqueCase(data){
+
+function remplireBaqueCase(data){
     let cp = document.getElementById('cpBanque');
     let ville = document.getElementById("villeBanque");
     let tel = document.getElementById("telBanque");
     let adresse= document.getElementById('adresseBanque');
     let icon = document.getElementById('iconBanque');
 
-    //assets/img/BNP.xcf
-   
-
+    //remplisage
     cp.innerHTML =data['cpBanque'];
     ville.innerHTML = data['villeBanque'];
     tel.innerHTML = data['telBanque'];
     adresse.innerHTML = data['adresseBanque'];
     icon.src="assets/img/"+data['courtNomBanque'];
-    console.log( icon);
  }
 
+ //quand on rempli le numéro facture
  $('#factureForme').on('change','#numeroFacture',function(event){
-    // console.log( $('#factureForme'));
-    let numeroFacture = this.value;
+    let numeroFacture = this.value; //numero facture
     let errMesaage = document.getElementById("erreurMessageFacture");
     errMesaage.innerHTML="";
-     $.ajax(
+     $.ajax(  //request POST vers fetchFunction.php
          {
             url:'models/includes/fetchFunctions.php',
-         type:'POST',
-         data:{
+            type:'POST',
+            data:{
             'chackFacture': numeroFacture,
         },
          success:function(msg){
             if(msg !==""){
-                alert("sdd")
-                // console.log(event[preventDefault()]);
-                  event.preventDefault();
+                //ici on a déja  une facture avec ce numero
                 errMesaage.innerHTML = msg;
             }
       
@@ -265,8 +230,30 @@ $("#formImpression").on('click','#deleteManyImpressions',function(event){
       });
  });
 
+//  $(".table").on('click','.printButton',function(){
+//     let searchValue = document.getElementById('search').value;
+//     let table = $(".table");  
+//     var currentRow = $(this).closest("tr");
+//    // var deleteRow = currentRow.find(".row")[1];
+//     console.log( deleteRow );
+ 
+//       $.ajax(
+//       {
+//            url:'models/FatchImpressionManager.php',
+//            type:'POST',
+//            data:{
+//               'deleteRow': deleteRow,
+//               'searchValue':((searchValue !="") ? searchValue : ""),
+//           },
+//            success:function(e){
+//              table.innerHTML="";
+//              table.html(e);
+          
+//            }
+//       });
+//  });
 
- $('table').on('change','.td-input',function(){
+ $('#tableImression').on('change','.td-input',function(){
 
     var self = this;
     var colName = this.name;
@@ -325,8 +312,6 @@ function changeImpressionRow(nFact, colName, value){
 
 
 $('.search').on('input',function(){
- 
-
      $.ajax(
          {
         url:'models/FatchImpressionManager.php',
@@ -345,43 +330,65 @@ $('.search').on('input',function(){
      
  });
 
+function printCheque() {
+    let socId = document.getElementById('selectSociete').value;
+    let montantLettres = document.getElementById('somme').innerHTML;
+    let montant = document.getElementById('sommeCheque').innerHTML;
+      $.ajax(
+          {
+         url:'models/includes/pdf-print.php',
+         type:'POST',
+         data:{
+             'socId': socId ,
+             'montantLettres': montantLettres,
+             'montant': montant,
 
-function load_data(page, query=''){
-    $.ajax(
-        {
-       url:'models/includes/fetchImpression.php',
-       type:'POST',
-       data:{page:page, query:query},
-       beforeSend:function(){
-       console.log("woeking on");
-       },
-       success:function(data){
-           let parseSocietes= JSON.parse(data);
-           console.log(parseSocietes);
+         },
+         success:function(data){
+
+             html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
+             // pdfObj has your jsPDF object in it, use it as you please!
+             // For instance (untested):
+             pdfObj.autoPrint();
+             window.open( pdfObj.output('bloburl'), 'F');
+             checkPrint();
+         });
+          }
+      }); 
+}
+ function checkPrint(){
+    // var mediaQueryList = window.matchMedia('print');
+    // if( mediaQueryList.matches){
+    //    console.log("d");
+    // }
+   
+ }
+ var beforePrint = function() {
+   console.log("ss");
+};
+var afterPrint = function() {
+    console.log("sxxxs");
+};
+
+if (window.matchMedia) {
+    var mediaQueryList = window.matchMedia('print');
+    mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+            beforePrint();
+        } else {
+            afterPrint();
         }
     });
 }
 
+window.onbeforeprint = beforePrint;
+window.onafterprint = afterPrint;
+//     if (mql.matches) {
+//         console.log('onbeforeprint equivalent');
+//     } else {
+//         console.log('onafterprint equivalent');
+//     }});
 
-function printTrigger() {
-    $.ajax(
-        {
-       url:'models/includes/test.php',
-       type:'POST',
-       data:'cheque',
-       beforeSend:function(){
-       console.log("woeking on");
-       },
-       success:function(data){
-            html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
-            // pdfObj has your jsPDF object in it, use it as you please!
-            // For instance (untested):
-            pdfObj.autoPrint();
-          window.open( pdfObj.output('bloburl'), 'F');
-        });
-        }
-    });
-}
 
 function test(){
     alert("sd");
@@ -407,4 +414,164 @@ function ff(){
   let y = document.getElementById('test10');
   console.log("sdd");
   console.log(y);
+}
+
+
+
+
+$('#sitesearch').on("input", function () {
+  
+    filtre_checked=0;
+    let input,filter, table,tr,td_soc,td_fac;
+    input= document.getElementById('sitesearch').value;
+    filter  = input.toUpperCase();
+    table = document.getElementById("tableSignature");
+    tr = table.getElementsByTagName("tr")
+    for(let i=1;i<tr.length;i++){
+        td_soc = tr[i].getElementsByTagName("td")[2];
+        td_fac = tr[i].getElementsByTagName("td")[0];
+        if(td_soc || td_fac ){
+            txtSoc = td_soc.innerText;
+            txtFac=td_fac.innerText;
+            if(txtSoc.toUpperCase().indexOf(filter)>-1 || txtFac.toUpperCase().indexOf(filter)>-1 ){
+                tr[i].style.display="";
+                filtre_checked++;
+            }else{
+                tr[i].style.display="none";
+            }
+        }
+    }
+  
+        //document.getElementById("serachForm").submit();
+
+ })
+
+ $("numeroCheque").on('input',function(){
+    alert("ds");
+    let numeroCheque = this.value; //numero facture
+    let errMesaage = this.nextElementSibling;
+    errMesaage.innerHTML="";
+     $.ajax(  //request POST vers fetchFunction.php
+         {
+            url:'models/includes/fetchFunctions.php',
+            type:'POST',
+            data:{
+            'chackCheque': numeroCheque,
+        },
+         success:function(msg){
+            console.log(msg);
+            if(msg !==""){
+                //ici on a déja  une cheque avec ce numero
+                errMesaage.innerHTML = msg;
+            }
+      
+         }
+     });
+
+});
+
+//signature
+function toggleCheckbox(trId){
+    trTable = document.querySelector('.'+trId); 
+    var numeroCheque = jQuery('.'+trId).find("td:eq(5) input[type='text']")[0].value;
+    var dateCheque = jQuery('.'+trId).find("td:eq(6) input[type='date']")[0].value;  
+    var numeroFacture = jQuery('.'+trId).find("td:eq(0)")[0];  
+
+     if(!numeroCheque  || !dateCheque || !numeroFacture ){
+         document.getElementById('msgDiv').style.backgroundColor = "red";
+         document.getElementById("msg").innerHTML='veyez remplisez tout les cases';
+         setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+         window.location.href="signature";
+     } else {
+         $.ajax(  //request POST vers fetchFunction.php
+         {
+            url:'models/includes/fetchFunctions.php',
+            type:'POST',
+            data:{
+            'numeroCheque': numeroCheque,
+            'dateCheque': dateCheque,
+            'numeroFacture': numeroFacture,
+        
+        },
+         success:function(){
+             document.getElementById('msgDiv').style.backgroundColor = "green";
+             document.getElementById("msg").innerHTML='signature éfectué';
+             setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+     
+         }
+     });
+     }
+    console.log(dateCheque );
+}
+
+function envoyerExpedition(chequeId){
+    console.log(chequeId);
+    $.ajax(  //request POST vers fetchFunction.php
+    {
+    url:'models/includes/fetchFunctions.php',
+       type:'POST',
+       data:{
+       'chequeExpedition': chequeId,
+   
+   },
+    success:function(msg){
+        if(msg){
+             document.getElementById('msgDiv').style.backgroundColor = "green";
+             document.getElementById("msg").innerHTML=msg;
+          //   setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+        } else {
+            document.getElementById('msgDiv').style.backgroundColor = "red";
+             document.getElementById("msg").innerHTML='expedition échué';
+             setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+        }
+
+    }
+});
+}
+
+function annulerExpedition(chequeId){
+    console.log(chequeId);
+    $.ajax(  //request POST vers fetchFunction.php
+    {
+    url:'models/includes/fetchFunctions.php',
+       type:'POST',
+       data:{
+       'chequeExpedition': chequeId,
+   
+   },
+    success:function(msg){
+        if(msg){
+             document.getElementById('msgDiv').style.backgroundColor = "green";
+             document.getElementById("msg").innerHTML=msg;
+          //   setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+        } else {
+            document.getElementById('msgDiv').style.backgroundColor = "red";
+             document.getElementById("msg").innerHTML='expedition échué';
+             setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+        }
+
+    }
+});
+}
+
+
+function description(rowId){
+    document.getElementById("rowDescription").value = rowId;
+    document.getElementById('descriptionForm').style.display = "block"
+ }
+ function annulerDescription(){
+    document.getElementById('descriptionForm').style.display = "none";
+ }
+function envoyerDescription(){
+
+    console.log(document.getElementById("descriptionForm"));
+    document.getElementById("descriptionForm").submit()
+    alert("dsd");
+    document.getElementById('descriptionForm').style.display = "none";
+}
+function afficherDescription(idDivDescription){
+    document.getElementById(idDivDescription).style.display = "block";
+}
+function desafficherDescription(idDivDescription){
+    document.getElementById(idDivDescription).style.display = "none";
 }

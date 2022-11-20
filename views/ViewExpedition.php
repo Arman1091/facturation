@@ -5,15 +5,14 @@ $societeManager = new SocieteManager;
 
 ?>
 <div class="container">
-    <form method="post">
+   <div class="serachForm mt-2 d-flex justify-content-end">
+        <label class="mx-2" for="site-search"><strong>Search avec Societe/N_fact</strong></label>
+         <input class="sitesearch" type="search" id="sitesearch" name="site-search">
+   </div>
+    <form method="post" class="mx-1">
         <table class="table table-sm">
             <thead>
                 <tr>
-                    <th scope="col">
-
-                        <input type="checkbox" name="selectAll" id="selectAll" class="selectAll">
-
-                    </th>
                     <th scope="col">Id</th>
                     <th scope="col">N°Facture</th>
                     <th scope="col">Date Facture</th>
@@ -43,7 +42,6 @@ $societeManager = new SocieteManager;
                         // $arr = explode("_", $envois[$i]->NCheque());
                 ?>
                    <tr>
-                        <td ><input class="checkitem" type="checkbox" name=checkitems[] value="<?= $facture->numero()?>"></td>
                         <th scope="row"><?= ($i + 1) ?></th>
                         <td><?= $facture->numero()?></td>
                         <td><?= $facture->date()?></td>
@@ -57,8 +55,8 @@ $societeManager = new SocieteManager;
                         <td class="d-flex">
                           
                     
-                                <button type="submit" class="btn btn-danger">Annuler</button>
-                                <button type="submit" class="btn btn-primary mx-1">Envoyer</button>
+                                <button type="button" class="btn btn-danger" >Annuler</button>
+                                <button type="button" class="btn btn-primary mx-1" onclick="envoyerExpedition('<?= $cheques[$i]->numero()?>')" >Envoyer</button>
              
 
                         </td>
@@ -69,18 +67,17 @@ $societeManager = new SocieteManager;
         </table>
     </form>
 </div>
-<!-- <div>
-    <form id="descriptionForm" name="descriptionForm" method="post">
-
-        <h1 id="ee" class="text-center">Ajouter une raison </h1>
+ <div id="descriptionDiv" name="descriptionDiv" style="display:none">
+        <h1 class="text-center">Ajouter une raison </h1>
         <div class="d-flex justify-content-center">
-            <textarea name="description" id="description" cols="30" rows="10" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;"></textarea>
+            <textarea name="description" id="description" cols="30" rows="10"></textarea>
         </div>
         <div class="d-flex justify-content-center mt-3">
             <input type="hidden" id="rowDescription" name="rowDescription" value="">
             <button class="mx-2" class="btn btn-primary" type='button' name="ok" onclick="envoyerDescription()">Ok</button>
             <button class="btn btn-danger" type='button' onclick="annulerDescription()">Annuler</button>
         </div>
-
-    </form>
-</div> -->
+</div>
+<div class="mt-3"id="msgDiv">
+                 <h6 class="p-2" id="msg"></h6>
+         </div>

@@ -77,10 +77,10 @@ if (isset($_POST['deleteCheckItems']) && !empty($_POST['deleteCheckItems'])) {
     }
 }
 
-// if(!isset($factures)){
-//     $factureManager = new FactureManager;
-//     $factures = $factureManager->getFacturesAttantes(0);
-// }
+if(!isset($factures)){
+    $factureManager = new FactureManager;
+    $factures = $factureManager->getFacturesAttantes(0);
+}
 $societeManager = new SocieteManager;
 $societes = $societeManager->getSocietes();
 
@@ -102,8 +102,6 @@ $str.= '
              </thead>
              <tbody class="tbody">';
 
-                
-                    if (isset($factures)) {
                         for ($i = 0; $i < count($factures); $i++) {
 
                             $fk_societe = (int) $factures[$i]->fkSociete();
@@ -139,7 +137,6 @@ $str.= '
                              </td>
                          </tr>';
 
-                  }
                     } 
          $str.= '
              </tbody>

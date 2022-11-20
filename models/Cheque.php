@@ -113,7 +113,7 @@ class Cheque
             $req->execute();
             $data = $req->fetch(PDO::FETCH_ASSOC);
            if(isset($data)){ //vierification si il'y a du fcture avec ce numero
-            $banque = new Facture($data);//creation un objet avec les infos $data
+            $banque = new Facture($data);//creation un objet avec les infos de  $data
             return $banque;
            }
         } catch (PDOException $e) {

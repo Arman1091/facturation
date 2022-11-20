@@ -1,54 +1,52 @@
 <?php
+ //chargement automatique classes
+ spl_autoload_register(function ($class) {
+    require_once('../'.$class . '.php');
+});
 
-use Spipu\Html2Pdf\Html2Pdf;
-use Spipu\Html2Pdf\Exception\Html2PdfException;
-use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+if (1==1) {
+    try {
 
-require 'assets/includes/vendor/autoload.php';
-$html2pdf = new Html2Pdf();
+        $id= strip_tags(htmlspecialchars($_POST['socId']));
+        $montantLettres = strip_tags(htmlspecialchars($_POST['montantLettres']));
+        $montant = strip_tags(htmlspecialchars($_POST['montant']));
 
-ob_start();
-?>
+        $sociteManager = new SocieteManager;
+       $societe = $sociteManager->getSociete($id);
+      
+          
 
-<page>
-
-
-
-    <div class="container" id="chequeDiv" style="position: relative;height: 40%;width: 100% ;left:0;">
-
-         <img id="image" src="assets/img/cheque.webp" alt="sdd" style="width: 100%;position: absolute;
-    top: 55%;"> 
-        <h4 id="montantLettres" style="width: 100%;position: absolute;left:74%; top: 61%;">
-            <?= 15 ?>
-        </h4>
-        <h2 id="montant" style="width: 100%;position: absolute; top: 67%;">
-            <?= 16 ?>
-        </h2>
-        <h4 id="lieu" style="width: 100%;position: absolute; top: 71%;">
-            Saint-Palais-sur-Mer
-        </h4>
-        <h4 id="dateCheque" style="width: 100%;position: absolute; top: 74%;">
-            <?= 17 ?>
-        </h4>
-
-    </div>
-
-
-</page>
-
-
-
-
-<?php
-
-$content = ob_get_clean();
-
-try {
-
-    $html2pdf->writeHTML($content);
-    // $html2pdf->output('t.pdf');
-     $html2pdf->pdf->IncludeJS('print()');
-    $html2pdf->output('cheque.pdf');
-} catch (Html2PdfException $e) {
-    echo $e->getMessage();
+        echo '
+        <div class="d-flex justify-content-center align-items-center" style="height: 100vh; width:800px">
+        <div class="row" style="width:800px;">
+            <div class="col-8">
+                <div>
+                   <p id="montat_lettre" style="margin-left:50px">'. $montantLettres.'</p>
+                </div>
+                <div>
+                <p id="societeNom">'.$societe->nom().'</p>
+                </div>
+                <div class="row d-flex justify-content-end">
+                    <div class="col-6">
+                        <p>ETOILS SECOURS</p>
+                        <p>120 RUE LUCIEN DEVAUX</p>
+                        <p>17420 SAINT-PALAIS-SUR-MER</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div>
+                    <p id="somme_shifre" class="text-center"style="padding: 10px;">'.$montant.'</p>
+                    <p>SAINT-PALAIS-SUR-MER</p>
+                    <p>'.date("d/m/y").'</p>
+                </div>
+            </div>
+        </div>
+  </div>
+        ';
+  
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        die();
+    }
 }

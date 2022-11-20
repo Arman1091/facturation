@@ -1,62 +1,59 @@
 <?php
 $societeManager = new SocieteManager;
-$paiementManager = new PaiementManager;
 ?>
 <div class="container">
+    <div id="serachForm" class="d-flex justify-content-end mt-2">
+         <label class="mx-2" for="site-search"><strong>Search avec Societe/N_fact</strong></label>
+         <input class="sitesearch" type="search" id="sitesearch" name="site-search">
+    </div>
     <table class="table table-sm">
         <thead>
             <tr>
-                <th scope="col">
-
-                    <input type="checkbox" name="selectAll" id="selectAll" class="selectAll">
-
-                </th>
                 <th scope="col">Id</th>
-                <th scope="col">Date_cheque</th>
+                <th scope="col">N°Facture</th>
+                <th scope="col">Date Facture</th>
                 <th scope="col">Societe</th>
-                <th scope="col">N_fact</th>
+                <th scope="col">Banque</th>
                 <th scope="col">Montant</th>
-                <th scope="col">Mode de paiement</th>
-                <th scope="col">N_cheque</th>
-                <th scope="col">Signée</th>
-                <th scope="col">Statut</th>
+                <th scope="col">N°Cheque</th>
+                <th scope="col">Date Cheque</th>
+                <th scope="col">Signature</th>
+                <th scope="col">Expedition</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
-            <?php for ($i = 0; $i < count($elementsHistorique); $i++) {
-                $fk_soc = (int) $elementsHistorique[$i]->FkSoc();
-                $paiementId = (int)$elementsHistorique[$i]->FkPaiement();
+            <?php for ($i = 0; $i < count($cheques); $i++) {
+                $facture = $cheques[$i]->getFacture();
+                $fk_soc = $facture ->fkSociete();
                 $societe = $societeManager->getSociete($fk_soc);
-                $paiement = $paiementManager->getPaiement($paiementId);
-                $arr = explode("_", $elementsHistorique[$i]->NCheque());
+                $banque = $societe->getBanque();
             ?>
 
                 <tr>
-                    <td name="y<?= $i ?>"><input class="checkitem" type="checkbox" name=checkitems[] value="<?= $elementsHistorique[$i]->id() ?>"></td>
                     <th scope="row"><?= ($i + 1) ?></th>
-                    <td><?= $elementsHistorique[$i]->DateCheque() ?></td>
+                    <td><?= $facture->numero() ?></td>
+                    <td><?= $facture->date() ?></td>
                     <td><?= $societe->nom() ?></td>
-                    <td><?= $elementsHistorique[$i]->NFact() ?></td>
-                    <td><?= $elementsHistorique[$i]->Montant() ?></td>
-                    <td><?= $paiement->type() ?></td>
-                    <td><?= $arr[1] ?></td>
+                    <td><?= $banque->nom() ?></td>
+                    <td><?= $facture->montant() ?></td>
+                    <td><?= $cheques[$i]->numero()?></td>
+                    <td><?= $cheques[$i]->date()?></td>
+                    <td><?= $cheques[$i]->dateSignature()?></td>
+                    <td><?= $cheques[$i]->dateExpedition()?></td>
                     <td>
-                        <input type="checkbox" checked data-toggle="toggle" data-onstyle="outline-primary" data-offstyle="outline-secondary">
-                        <span><?= $elementsHistorique[$i]->DateSigner() ?></span>
-                    </td>
-                    <td>
-                        <?php if ($elementsHistorique[$i]->EnvoyerAnnuler() == 0) { ?>
+                        <?php if ($cheques[$i]->statutExpedition()== 1) { ?>
 
                             <span>
-                                <img src="assets/icons/succer.png" alt="" style="width:45px ;"> <?= $elementsHistorique[$i]->DateDepart() ?>
+                                <img src="assets/icons/succer.png" alt="" style="width:45px ;"> 
                             </span>
-                        <?php  } else { ?>
+                        <?php  } elseif($cheques[$i]->statutExpedition() !=null) { ?>
                             <span>
-                                <img src="assets/icons//annulation.png" alt="" style="width:28px ;" onmouseover="afficherDescription('divDescription<?= $i ?>')" onmouseout="desafficherDescription('divDescription<?= $i ?>')"> <?= $elementsHistorique[$i]->DateDepart() ?>
+                                <img src="assets/icons//annulation.png" alt="" style="width:28px ;" onmouseover="afficherDescription('divDescription<?= $i ?>')" onmouseout="desafficherDescription('divDescription<?= $i ?>')"> 
                             </span>
-                            <div class="mt-2">
-                                <p id="divDescription<?= $i ?>" class="text-danger" style="display: none;"><?= $elementsHistorique[$i]->Description() ?></p>
-                            </div>
+                                <div class="mt-2">
+                                     <p id="divDescription<?= $i ?>" class="text-danger" style="display: none;"><?= $cheques[$i]->description() ?></p>
+                                 </div> 
 
                         <?php } ?>
 

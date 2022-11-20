@@ -2,33 +2,20 @@
 require_once('views/View.php');
 class ControllerHistorique
 {
-    private $historiqueManager;
+    private $chequeManager;
     private $view;
 
     public function __construct($url)
     {
-
-        if (isset($url)) {
-
-            if (count((array)$url) > 1) {
-
-                throw new Exception('Page introuvable');
-            } else {
-
-                $this->historiques();
-            }
-        } else {
-
-            $this->historiques();
-        }
+        $this->historique();
     }
 
 
-    public function historiques()
+    public function historique()
     {
-        $this->historiqueManager = new HistoriqueManager;
-        $elementsHistorique = $this->historiqueManager->getHistoriques();
+        $this->chequeManager= new ChequeManager;
+        $cheques = $this->chequeManager->getChequesComplets();
         $this->view = new View('Historique');
-        $this->view->generate(array('elementsHistorique' =>  $elementsHistorique));
+        $this->view->generate(array('cheques' => $cheques));
     }
 }

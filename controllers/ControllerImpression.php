@@ -10,24 +10,11 @@ class ControllerImpression
 
     public function __construct($url)
     {
-
-        if (isset($url)) {
-
-            if (count((array)$url) > 1) {
-
-                throw new Exception('Page introuvable');
-            } else {
-
-                $this->printes();
-            }
-        } else {
-
-            $this->printes();
-        }
+        $this->impression();
     }
 
 
-    public function printes()
+    public function impression()
     {
         $this->impressionManager = new FactureManager;
         $this->societeManager = new SocieteManager;

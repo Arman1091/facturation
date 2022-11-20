@@ -58,19 +58,17 @@ class FactureManager extends Model
     }
     public function getFacture($nFact)
     {
-
         try {
             $sql = "SELECT * from facture WHERE   `numeroFacture`=:numero_facture";
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(':numero_facture', $nFact, PDO::PARAM_STR);
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            if ($data) {
-                $var = new Facture($data);
+            if ($data) {//verification si facture exist 
+                $var = new Facture($data); //new object de la Facture
                 return $var;
             }
-            $query->closeCursor();
-        } catch (PDOException $e) {
+        } catch (PDOException $e) { 
             echo "Error: " . $e->getMessage();
             die();
         }
