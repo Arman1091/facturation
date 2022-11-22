@@ -23,28 +23,27 @@ if (!empty($_POST)) {
         $montant = htmlspecialchars(strip_tags($_POST['montant']));
         $montant_lettres = htmlspecialchars(strip_tags($_POST['montantLettres']));
         $date_facture = htmlspecialchars(strip_tags($_POST['dateFacture']));
-        $statut = 0;
+
 
         if (isset($_POST['enregistrer'])) {
-
-            $statut = 0;
-            $instance = new Facture([
-                "dateFacture" => $date_facture,
-                "fkSociete" => $societe_id,
-                "numeroFacture" =>  $numero_facture,
-                "montantFacture" => $montant,
-                "montantLettresFacture" => $montant_lettres,
-                "statutFacture" => $statut
-            ]);
-    
-            $factureManager = new FactureManager;
-            $factureManager->newFacture($instance);
+            $statut = 0;   
         } else{
-            //require_once('models/includes/pdf-print.php');
+            $statut = 1;
         }
     } else {
         echo ("Le formulaire est incomplete");
     }
+    $instance = new Facture([
+        "dateFacture" => $date_facture,
+        "fkSociete" => $societe_id,
+        "numeroFacture" =>  $numero_facture,
+        "montantFacture" => $montant,
+        "montantLettresFacture" => $montant_lettres,
+        "statutFacture" => $statut
+    ]);
+
+    $factureManager = new FactureManager;
+    $factureManager->newFacture($instance);
 }
 
 ?>
@@ -54,7 +53,7 @@ if (!empty($_POST)) {
         <div class="col-md-4 col-sm-7">
             <div class="container-flud">
                 <div class="row">
-                    <form id="factureForme" class="factureForme" method="post">
+                    <form id="factureForme" class="factureForme" name="factureForme" method="post">
 
                         <div class="form-group mt-2">
                             <label class="text-danger" for="selectSociete">Societe</label>
@@ -129,8 +128,8 @@ if (!empty($_POST)) {
                             <p style="line-height: 0.1em; margin-top:-0.5em !important">xxxxxxxxxxxxxxxxxxx</p>
                             <div>
                                 <p class="banque-text"style="line-height: 0.5em;">ETOILS SECOURS</p>
-                                <p class="banque-text"style="line-height: 0.5em;">18 RUE DE LA BANQUE</p>
-                                <p class="banque-text"style="line-height: 0.5em;">87000 LIMOGES</p>
+                                <p class="banque-text"style="line-height: 0.5em;">120 Rue Lucien Devaux</p>
+                                <p class="banque-text"style="line-height: 0.5em;">17420 Saint-Palais-Sur-Mer</p>
 
                             </div>
                         </div>
@@ -176,10 +175,10 @@ if (!empty($_POST)) {
         </div>
     </div>
     <div class="text-center mt-3">
-        <button class="btn bg-primary " type="submit" form="factureForme" name="enregistrer" value="1">Enregistrer</button>
+        <button class="btn bg-primary " type="submit" form="factureForme" name="enregistrer" value="submit">Enregistrer</button>
         <button class="btn bg-secondary mx-1" type="button"   onclick="printCheque()">Imprimer</button>
     </div>
- <div>
-<iframe id="iFramePdf" src="models/includes/pdf-print.php" style="display: none;"></iframe>
-</div> 
+    <div class="mt-3" id="msgDiv">
+        <h6 class="p-2" id="msg"></h6>
+    </div>
 </div>

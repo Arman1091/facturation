@@ -40,11 +40,11 @@
     ?>
 
 
- <div class="d-flex justify-content-end mt-3 mx-3">
-     <form action="" method="post" id="serachForm">
+<div class="d-flex justify-content-end mt-3 mx-3">
+     <div id="serachForm">
          <label class="mx-2" for="site-search"><strong>Search avec Societe/N_fact</strong></label>
          <input class="search" type="search" id="search" name="site-search">
-     </form>
+</div>
  </div>
  <div class="container">
      <form method="post" name="formImpression" id="formImpression">
@@ -78,9 +78,9 @@
                              <td scope="row">
                                  <p class="mx-2"><?= ($i + 1) ?></p>
                              </td>
-                             <td value="<?= $factures[$i]->numero() ?>"><input class="td-input row" value="<?= $factures[$i]->numero() ?>" type="text" id="numeroFacture" name="numeroFacture"></td>
-                             <td value="<?= $factures[$i]->numero() ?>"><input class="td-input" value="<?= $factures[$i]->date() ?>" type="date" id="dateFacture" name="dateFacture"></td>
-                             <td value="x">
+                             <td ><input class="td-input row" value="<?= $factures[$i]->numero() ?>" type="text" id="numeroFacture" name="numeroFacture"></td>
+                             <td ><input class="td-input" value="<?= $factures[$i]->date() ?>" type="date" id="dateFacture" name="dateFacture"></td>
+                             <td >
                                  <select name="fkSociete" class="td-input" type="select">
                                      <option selected value=""><?= $societe->nom() ?></option>
                                      <?php foreach ($societes as $societe) : ?>
@@ -97,7 +97,7 @@
                                  <input class="w-100  bg-olive td-input" type="number" step="0.01" min=1 id="m" name="montantFacture" value="<?= $factures[$i]->montant() ?>">
                              </td>
                              <td class="d-flex justify-content-center align-items-center">
-                                 <button type="button" class="btn btn-danger deleteButton " style="height: 50%;" value="<?php echo ($factures[$i]->numero()) ?>">Delete</button>
+                                 <button type="button" class="btn btn-danger deleteButton" style="height: 50%;" value="<?php echo ($factures[$i]->numero()) ?>">Delete</button>
                                  <button type="button" class="btn btn-primary printButton mx-1 " style="height: 50%;" value="<?php echo ($factures[$i]->numero()) ?>">Print</button>
                              </td>
                          </tr>
@@ -111,8 +111,8 @@
                  <h6 class="p-2" id="changeMsg"></h6>
          </div>
          <div>
-             <button type="button" id="deleteManyImpressions" class="btn btn-danger" name="deleteOrPrint" value=1>Delete</button>
-             <button type="button" class="btn btn-primary" name="printManyImpressions" value=0>Print</button> 
+             <button type="button" id="deleteManyImpressions" class="btn btn-danger">Delete</button>
+             <button type="button" class="btn btn-primary" name="printManyImpressions" onclick="printFactures()">Print</button> 
          </div>
 
      </form>

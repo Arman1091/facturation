@@ -5,33 +5,35 @@
 });
 
 if (isset($_POST['search'])) {
+    //ici $_POST['search'] exist
     try {
-        $searchValue = strip_tags($_POST['search']);
+        $searchValue = htmlspecialchars(strip_tags($_POST['search']));
         $factureManager = new FactureManager;
         if (!empty($_POST['search'])) {
+            //value n'est pas vide
             $factures = $factureManager->getFacturesByFiltre(0,$searchValue);
         } else {
+            //value est  vide
             $factures = $factureManager->getFacturesAttantes(0);
-        }
-
-        
+        }  
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         die();
     }
-}
+};
 
 //update Impression row
 if (
     isset($_POST['numeroFacture'], $_POST['editCol'], $_POST['editValue'])
     && !empty($_POST['numeroFacture']) && !empty($_POST['editCol']) && !empty($_POST['editValue'])
 ) {
-    
+    //ici les valeurs ixiste
     $numeroFacture = htmlspecialchars(strip_tags($_POST['numeroFacture']));
     $colName = htmlspecialchars(strip_tags($_POST['editCol']));
     $editValue = htmlspecialchars(strip_tags($_POST['editValue']));
 
     $factureManager = new FactureManager;
+//apelle editFacture pour modification
     if($factureManager->editFacture($numeroFacture, $colName, $editValue)){
         if(isset($_POST['searchValue']) && !empty($_POST['searchValue'])){
             $searchValue = htmlspecialchars(strip_tags($_POST['searchValue']));
@@ -39,17 +41,40 @@ if (
         }
     }
 }
+if (
+    isset($_POST['numeroCheque'], $_POST['dateCheque'], $_POST['descriptionCheque'],$_POST['numeroFacture'],)
+    && !empty($_POST['numeroCheque'])  && !empty($_POST['numeroFacture'])&& !empty($_POST['dateCheque']) && !empty($_POST['descriptionCheque'])
+) {
+    var_dump("sd");
+    die;
+    $numeroCheque = htmlspecialchars(strip_tags($_POST['chackCheque']));
+    $dateCheque = htmlspecialchars(strip_tags($_POST['dateCheque']));
+    $description = htmlspecialchars(strip_tags($_POST['descriptionCheque']));
+    $numeroFacture = htmlspecialchars(strip_tags($_POST['numeroFacture']));
+    $chequeManager = new ChequeManager; //new objet de chequeManager
+    $chequeManager->newCheque($numeroCheque, $dateCheque ,$description ,$numeroFacture);//crée nouvelle cheque
+    // $factureManager = new FactureManager;
+    // $facturs =  $factureManager->getFacturesAvecCheque($statut);
+}
+
+
+
+
+
 if (isset($_POST['deleteRow']) && !empty($_POST['deleteRow'])) {
     try {
+        //protection des données
         $nFact = strip_tags($_POST['deleteRow']);
-        $factureManager = new FactureManager;
+        $factureManager = new FactureManager;//un ictance fe Facture Manager
         if($factureManager->deleteFacture($nFact)){
-            $msg = "supression réussie";
+            $msg = "supression réussie";//supresion réussie
         } else {
-            $msg = "supression échouée";
+            $msg = "supression échouée";//supresion échouée
         }
          if(isset($_POST['searchValue']) && !empty($_POST['searchValue'])){
+            //ici la value de recherche n'est pad vide
              $searchValue = htmlspecialchars(strip_tags($_POST['searchValue']));
+            //  récupération les factures filtrés
              $factures = $factureManager->getFacturesByFiltre(0 ,$searchValue);
          }
     } catch (PDOException $e) {
@@ -76,8 +101,26 @@ if (isset($_POST['deleteCheckItems']) && !empty($_POST['deleteCheckItems'])) {
         die();
     }
 }
+if (isset($_POST['changPrintsStatus']) && !empty($_POST['changPrintsStatus'])) {
+    try {
+        //$_POST['changPrintsStatus'] exist
+        $data =$_POST['changPrintsStatus'];
+        $factureManager = new FactureManager;
+        for($i = 0; $i < count($data); $i++){
+            //pour tout les facture on change le statut
+            $numroFacture = $data[$i];
+            $factureManager->editFacture($numroFacture,"statutFacture",1);  
+        }
+        //recuperation des facture non imprimées
+        $factures = $factureManager->getFacturesAttantes(0);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        die();
+    }
+}
 
-if(!isset($factures)){
+if(!isset($factures)){ 
+    //ici on n'avais pas Sarch value
     $factureManager = new FactureManager;
     $factures = $factureManager->getFacturesAttantes(0);
 }
@@ -140,7 +183,10 @@ $str.= '
                     } 
          $str.= '
              </tbody>
-             <div class="mt-3"id="changeMsgDiv">
-                 <h6 class="p-2" id="changeMsg"></h6>
-            </div>';
+             <div class="mt-3"id="changeMsgDiv" >';
+             if(isset($msg) && !empty($msg)){
+                $str.= '<h6 class="p-2 changeMsg" id="changeMsg">'.$msg.'</h6>';
+             }
+                 
+             $str.= ' </div>';
             echo $str;

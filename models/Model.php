@@ -18,6 +18,14 @@ abstract class Model
         }
         return self::$_bdd;
     }
+
+    protected function closeBdd()
+    {
+        if (self::$_bdd == null) {
+            self::$_bdd = null;
+        }
+        return self::$_bdd;
+    }
 //récupérer tout les élements
     protected function getAll($table, $obj)
     {

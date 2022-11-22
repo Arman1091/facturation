@@ -4,8 +4,8 @@
     require_once('../'.$class . '.php');
 });
 
- if (isset($_POST['chackFacture']) && !empty($_POST['chackFacture'])) {
-     try {
+if (isset($_POST['chackFacture']) && !empty($_POST['chackFacture'])) {
+    try {
         //protection des données
          $numeroFacture = htmlspecialchars(strip_tags($_POST['chackFacture']));
          $factureManager = new FactureManager; //new objet de FactureManager
@@ -40,25 +40,25 @@
 }
 
 
-if (isset($_POST['numeroCheque'] ,$_POST['dateCheque'],$_POST['fkFacture']) && !empty($_POST['numeroCheque']) && !empty($_POST['dateCheque']) && !empty($_POST['fkFacture'])) {
-    try {
-       //protection des données
-        $numeroCheque = htmlspecialchars(strip_tags($_POST['chackCheque']));
-        $dateCheque = htmlspecialchars(strip_tags($_POST['dateCheque']));
-        $fkFacture = htmlspecialchars(strip_tags($_POST['fkFacture']));
-        $chequeManager = new ChequeManager; //new objet de chequeManager
-        $chequeManager->newCheque($numeroCheque, $dateCheque ,$fkFacture);//crée nouvelle cheque
-        $msg = "";
-        if(!empty($cheque)){
-           //ici on a déja une facture avec cette numero
-            $msg = "cette cheque existe déjà";
-        }
-        echo $msg;
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        die();
-    }
-}
+// if (isset($_POST['numeroCheque'] ,$_POST['dateCheque'],$_POST['fkFacture']) && !empty($_POST['numeroCheque']) && !empty($_POST['dateCheque']) && !empty($_POST['fkFacture'])) {
+//     try {
+//        //protection des données
+//         $numeroCheque = htmlspecialchars(strip_tags($_POST['chackCheque']));
+//         $dateCheque = htmlspecialchars(strip_tags($_POST['dateCheque']));
+//         $fkFacture = htmlspecialchars(strip_tags($_POST['fkFacture']));
+//         $chequeManager = new ChequeManager; //new objet de chequeManager
+//         $chequeManager->newCheque($numeroCheque, $dateCheque ,$fkFacture);//crée nouvelle cheque
+//         $msg = "";
+//         if(!empty($cheque)){
+//            //ici on a déja une facture avec cette numero
+//             $msg = "cette cheque existe déjà";
+//         }
+//         echo $msg;
+//     } catch (PDOException $e) {
+//         echo "Error: " . $e->getMessage();
+//         die();
+//     }
+// }
 
 if (isset($_POST['chequeExpedition']) && !empty($_POST['chequeExpedition'])) {
     try {
@@ -92,3 +92,4 @@ if (isset($_POST['chequeAnnulation'],$_POST['chequeDescription'])
         die();
     }
 }
+

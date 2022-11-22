@@ -26,37 +26,13 @@ function doConvert (){
 
 
 function doConvertLettres(){
-    alert("dd");
     let numberInput = document.querySelector('#montant').value ;
     let sommeLettres = document.querySelector('#sommeCheque');
     sommeLettres.innerHTML =numberInput;
     doConvert();
  }
 
-// function toggleCheckbox(i){
-// alert("sds");
-//     document.getElementById((i)).submit();
-// }
-//  function doConvertLettres(){
-//      doConvert();
-//   }
-// var checkboxes = document.querySelectorAll("input[type='checkbox']");
-// function checkAll(my){
-//     if(my.checked==true){
-//     checkboxes.forEach(function(checkbox){
-//         checkbox.checked=true;
-//     });
-// } else {
-//     checkboxes.forEach(function(checkbox){
-//         checkbox.checked=false;
-// });
-// }
-// }
 
-// var checkAll = document.getElementById("selectAll");
-// checkAll.addEventListener('change', function(){
-//     alert("yg");
-// })
 $('.selectAll').change(function(){
   alert("sdsd");
     // if(tr[i].style.display="none";)
@@ -117,7 +93,7 @@ function desafficherDescription(idDivDescription){
 //quand on choisi la societe, on va recoupere la banque et afficher
 $("#selectSociete").on('change', function(){
     let societe = this.options[this.selectedIndex].text;
-    remplireSocieteCase(societe);
+    remplireSocieteCase(societe); //remplir la partie sociéte sur la forma cheque
     let idSociete = this.value;
     $.ajax(
         {
@@ -126,7 +102,7 @@ $("#selectSociete").on('change', function(){
         data:'change='+ idSociete,
         success:function(data){
             let parseDate= JSON.parse(data);
-            remplireBaqueCase(parseDate);
+            remplireBaqueCase(parseDate);//remplir la partie cordonées sur la forma cheque
         
         }
     });
@@ -152,8 +128,8 @@ function remplireBaqueCase(data){
     icon.src="assets/img/"+data['courtNomBanque'];
  }
 
- //quand on rempli le numéro facture
- $('#factureForme').on('change','#numeroFacture',function(event){
+ //quand on input le numéro facture
+ $('#factureForme').on('input','#numeroFacture',function(){
     let numeroFacture = this.value; //numero facture
     let errMesaage = document.getElementById("erreurMessageFacture");
     errMesaage.innerHTML="";
@@ -175,48 +151,169 @@ function remplireBaqueCase(data){
 
 });
 
+$("#factureForme").on("submit", function(e){
+    let inputs = this;
+    for(var i=0; i<inputs.length; i++){ 
+        //pour chaque input verificatin si n'est pas vide  
+        if(inputs[i].value =='' && inputs[i].value !="submit"){
+            errMsg = "Veuillez renseigner tout les champs";
+            break;
+        }
+    }
+    let errFacture = document.getElementById("erreurMessageFacture").innerHTML;
+     if(errFacture){
+        //input un dublicat value dans la case numero facture
+        errMsg = "il exist deja une facture avec ce numero";
+     }
+if((errMsg)){
+    //ici on a un formulaire invalide
+    e.preventDefault();//on laisse pas l'envoi
+    document.getElementById('msgDiv').style.backgroundColor = "red";
+    document.getElementById("msg").innerHTML=errMsg;
+}else {
+    document.getElementById('msgDiv').style.backgroundColor = "red";
+    document.getElementById("msg").innerHTML=errMsg;
+}
+  document.getElementById("msgDiv").style.display="block";
+  //afficher le message 600ms
+ // setTimeout(function() {$('#msgDiv').fadeOut();}, 600)
+});
+
+
+if($("#factureForme")){
+    $("#factureForme").on("input", function(){
+    document.getElementById("msg").innerHTML = "";
+      document.getElementById("msgDiv").style.display="none";
+    });
+}
+
 
 //supprimer plusieurs d'un coup
-$("#formImpression").on('click','#deleteManyImpressions',function(event){
-    var cheeckItemss = $(".checkitem:checked");
-    if(cheeckItemss.length == 0) {
+$("#formImpression").on('click','#deleteManyImpressions',function(){
+    var cheeckItemss = $(".checkitem:checked");//les row selectées
+    if(cheeckItemss.length == 0) {//verify si y'a au moin un row
+        //si y'a oas de row selecté on affiche une mesage
         document.getElementById('changeMsgDiv').style.backgroundColor = "red";
         document.getElementById("changeMsg").innerHTML="choisissez au mois un row";
         document.getElementById('changeMsgDiv').style.display = "block";
         setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
     } else{
+        //si on a au moin un row
         let nFacturs = [];
         let searchValue = document.getElementById('search').value;
         for(j=0; j < cheeckItemss.length; j++){
-            nFacturs[j] = cheeckItemss[j].value;
+            nFacturs[j] = cheeckItemss[j].value; //on recopere les numeros  des factures selectées
         }
         $.ajax(
              {
-             url:'models/FatchImpressionManager.php',
+             url:'models/FetchImpressionManager.php',
              type:'POST',
              data:{
                 'deleteCheckItems': nFacturs,
                 'searchValue':((searchValue !="") ? searchValue : ""),
             },
              success:function(data){
-                if(confirm("Vous voulez supprimer")){
+                if(confirm(" voulez vous supprimer")){
+                    //apres la confirmation
                     let table = $("#tableImression");
-                    table.html(data);
+                    table.html(data);//remplacement la contenu
+                    document.getElementsByClassName("changeMsgDiv").style.display="block";
+                    //afficher le message 600ms
+                    setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
                 }
              }
          });
     }
 });
+//imprimer plusieurs d'un coup
+function printFactures(){
+    alert("sdd");
+    var cheeckItemss = $(".checkitem:checked");//les row selectées
+    if(cheeckItemss.length == 0) {//verify si y'a au moin un row
+        //si y'a oas de row selecté on affiche une mesage
+        document.getElementById('changeMsgDiv').style.backgroundColor = "red";
+        document.getElementById("changeMsg").innerHTML="choisissez au mois un row";
+        document.getElementById('changeMsgDiv').style.display = "block";
+        setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
+    } else{
+        //si on a au moin un row
+        let nFacturs = [];
+        for(j=0; j < cheeckItemss.length; j++){
+            nFacturs[j] = cheeckItemss[j].value; //on recopere les numeros  des factures selectées
+        }
+        $.ajax(
+             {
+             url:'models/includes/pdf-prints.php',
+             type:'POST',
+             data:{
+                'printCheckItems': nFacturs
+            },
+             success:function(data){   
+            // data contenu du pdf-prints.php
+            //crée pdf avec la contenu du data
+            html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
+                pdfObj.autoPrint();
+                window.open( pdfObj.output('bloburl'), 'popup');
+                changPrintsStatus(nFacturs);//change print status
+          });
 
- $(".table").on('click','.deleteButton',function(){
+             }
+         });
+    }
+};
+function changPrintsStatus(nFacturs){
+    $.ajax(
+        {
+        url:'models/FetchImpressionManager.php',
+        type:'POST',
+        data:{
+           'changPrintsStatus': nFacturs,
+       },
+        success:function(data){   
+                //apres la confirmation
+                let table = $("#tableImression");
+                table.html(data);//remplacement la contenu;
+        }
+    });
+}
+//delete une facture
+ $(".table").on('click','.deleteButton',function(){ 
+    //on verifié si on a un value dans la case recherche
     let searchValue = document.getElementById('search').value;
     let table = $(".table");  
     var currentRow = $(this).closest("tr");
+    //recuperation numero du facture par chexbox value
     var deleteRow = currentRow.find(".row")[0].value;
- 
+
       $.ajax(
       {
-           url:'models/FatchImpressionManager.php',
+        //requete vers la FetchImpressionManager.ph
+           url:'models/FetchImpressionManager.php',
+           type:'POST',
+           data:{
+              'deleteRow': deleteRow,
+              'searchValue':((searchValue !="") ? searchValue : ""),
+          },
+           success:function(contenu){
+            if(confirm(" voulez vous supprimer")){
+                 table.html(contenu); //remplacement table contenu
+                 document.getElementsByClassName("changeMsgDiv").style.display="block";
+                 //afficher le message 600ms
+                 setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
+            }
+           }
+      });
+ });
+ $(".table").on('click','.printButton',function(){
+    let searchValue = document.getElementById('search').value;
+    let table = $(".table");  
+    var currentRow = $(this).closest("tr");
+   // var deleteRow = currentRow.find(".row")[1];
+    console.log( deleteRow );
+
+      $.ajax(
+      {
+           url:'models/FetchImpressionManager.php',
            type:'POST',
            data:{
               'deleteRow': deleteRow,
@@ -225,41 +322,18 @@ $("#formImpression").on('click','#deleteManyImpressions',function(event){
            success:function(e){
              table.innerHTML="";
              table.html(e);
-          
+       
            }
       });
  });
 
-//  $(".table").on('click','.printButton',function(){
-//     let searchValue = document.getElementById('search').value;
-//     let table = $(".table");  
-//     var currentRow = $(this).closest("tr");
-//    // var deleteRow = currentRow.find(".row")[1];
-//     console.log( deleteRow );
- 
-//       $.ajax(
-//       {
-//            url:'models/FatchImpressionManager.php',
-//            type:'POST',
-//            data:{
-//               'deleteRow': deleteRow,
-//               'searchValue':((searchValue !="") ? searchValue : ""),
-//           },
-//            success:function(e){
-//              table.innerHTML="";
-//              table.html(e);
-          
-//            }
-//       });
-//  });
-
  $('#tableImression').on('change','.td-input',function(){
 
-    var self = this;
-    var colName = this.name;
-    var value = this.value;
-    var currentRow = $(this).closest("tr");
-    var nFact = currentRow.find(".checkitem")[0].value;
+    var self = this;//l'input ou on a fait la modification
+    var colName = this.name;//le nom input  ou on a fait la modification
+    var value = this.value;//la valur d'input ou on a fait la modification
+    var currentRow = $(this).closest("tr")//la row ou on a fait la modificatiob
+    var nFact = currentRow.find(".checkitem")[0].value;//numro de la facture par value de checkbox
     // vérification l'existence du numero facture
     if (this.id = "numeroFacture"){
         $.ajax(
@@ -293,7 +367,7 @@ function changeImpressionRow(nFact, colName, value){
     let searchValue = document.getElementById('search').value;
       $.ajax(
           {
-          url:'models/FatchImpressionManager.php',
+          url:'models/FetchImpressionManager.php',
           type:'POST',
           data:{
               'numeroFacture': nFact,
@@ -310,114 +384,71 @@ function changeImpressionRow(nFact, colName, value){
       
 }
 
-
+//search par numéro du cheque ou par nom de la société
 $('.search').on('input',function(){
+    let value = this.value;
      $.ajax(
          {
-        url:'models/FatchImpressionManager.php',
+        url:'models/FetchImpressionManager.php',
         type:'POST',
-        data:'search='+ this.value,
-        beforeSend:function(){
-        console.log("woeking on");
-        },
+        data:'search='+ value,
         success:function(data){
             let table = $("#tableImression");
-            table.html(data);
+            table.html(data);//remplace la contenu table sans récharger la page
       
          }
-     });
-
-     
+     });   
  });
 
 function printCheque() {
-    let socId = document.getElementById('selectSociete').value;
-    let montantLettres = document.getElementById('somme').innerHTML;
-    let montant = document.getElementById('sommeCheque').innerHTML;
-      $.ajax(
-          {
-         url:'models/includes/pdf-print.php',
-         type:'POST',
-         data:{
-             'socId': socId ,
-             'montantLettres': montantLettres,
-             'montant': montant,
+    let inputs = document.getElementById("factureForme").elements;
 
-         },
-         success:function(data){
-
-             html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
-             // pdfObj has your jsPDF object in it, use it as you please!
-             // For instance (untested):
-             pdfObj.autoPrint();
-             window.open( pdfObj.output('bloburl'), 'F');
-             checkPrint();
-         });
-          }
-      }); 
-}
- function checkPrint(){
-    // var mediaQueryList = window.matchMedia('print');
-    // if( mediaQueryList.matches){
-    //    console.log("d");
-    // }
-   
- }
- var beforePrint = function() {
-   console.log("ss");
-};
-var afterPrint = function() {
-    console.log("sxxxs");
-};
-
-if (window.matchMedia) {
-    var mediaQueryList = window.matchMedia('print');
-    mediaQueryList.addListener(function(mql) {
-        if (mql.matches) {
-            beforePrint();
-        } else {
-            afterPrint();
+    let errMsg ="";
+    for(var i=0; i<inputs.length; i++){      
+        if(inputs[i].value ==''){
+            alert("sd");
+            errMsg = "Veuillez renseigner tout les champs";
+            break;
         }
-    });
+    }
+    let errFacture = document.getElementById("erreurMessageFacture").innerHTML;
+     if(errFacture){
+        errMsg = "il exist deja une facture avec ce numero";
+     }
+     if((errMsg)){
+         //ici on a un formulaire invalide
+         document.getElementById('msgDiv').style.backgroundColor = "red";
+         document.getElementById("msg").innerHTML=errMsg;
+         setTimeout(function() {$('#msgDiv').fadeOut();}, 600)
+    }else {   
+        //recuperation des values
+        let socId = document.getElementById('selectSociete').value;
+        let montantLettres = document.getElementById('somme').innerHTML;
+        let montant = document.getElementById('sommeCheque').innerHTML;
+        $.ajax(
+            { //requête méthode POST vers pdf-print.php
+                url:'models/includes/pdf-print.php',
+                type:'POST',
+                data:{
+                    'socId': socId ,
+                    'montantLettres': montantLettres,
+                    'montant': montant,
+
+           },
+           success:function(data){
+            // data contenu du pdf-print.php
+            //crée pdf avec la contenu du data
+               html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
+                    pdfObj.autoPrint();
+                    window.open( pdfObj.output('bloburl'), 'popup');
+              });
+            }
+        }); 
+    }
 }
-
-window.onbeforeprint = beforePrint;
-window.onafterprint = afterPrint;
-//     if (mql.matches) {
-//         console.log('onbeforeprint equivalent');
-//     } else {
-//         console.log('onafterprint equivalent');
-//     }});
-
-
-function test(){
-    alert("sd");
-    $.ajax(
-        {
-       url:'models/includes/test.php',
-       type:'POST',
-       data:'test',
-       beforeSend:function(){
-       console.log("woeking on");
-       },
-       success:function(data){
-        html2pdf().from(data).toPdf().get('pdf').then(function (pdfObj) {
-            // pdfObj has your jsPDF object in it, use it as you please!
-            // For instance (untested):
-            pdfObj.autoPrint();
-           pdfObj.output('bloburl', 'F');
-        });
-        }
-    });
+function submitFacture(){
+    document.getElementById('factureForme').submit();
 }
-function ff(){
-  let y = document.getElementById('test10');
-  console.log("sdd");
-  console.log(y);
-}
-
-
-
 
 $('#sitesearch').on("input", function () {
   
@@ -447,9 +478,8 @@ $('#sitesearch').on("input", function () {
  })
 
  $("numeroCheque").on('input',function(){
-    alert("ds");
     let numeroCheque = this.value; //numero facture
-    let errMesaage = this.nextElementSibling;
+    let errMesaage = this.nextElementSibling;//err message
     errMesaage.innerHTML="";
      $.ajax(  //request POST vers fetchFunction.php
          {
@@ -488,20 +518,40 @@ function toggleCheckbox(trId){
             url:'models/includes/fetchFunctions.php',
             type:'POST',
             data:{
-            'numeroCheque': numeroCheque,
-            'dateCheque': dateCheque,
-            'numeroFacture': numeroFacture,
-        
+            'checkCheque': numeroCheque,
         },
-         success:function(){
-             document.getElementById('msgDiv').style.backgroundColor = "green";
-             document.getElementById("msg").innerHTML='signature éfectué';
-             setTimeout(function() {$('#msgDiv').fadeOut();}, 800);
+         success:function(msg){
+             if(msg !==""){  
+                //  exist
+                document.getElementById('changeMsgDiv').style.backgroundColor = "red";
+                document.getElementById("changeMsg").innerHTML=msg;
+                 //afficher le message 600ms
+                 setTimeout(function() {$('#changeMsgDiv').fadeOut();}, 600);
+               } else{
+                createCheque(numeroCheque,dateCheque,numeroFacture ) 
+               }              
      
          }
      });
      }
-    console.log(dateCheque );
+}
+
+function createCheque(numeroCheque,dateCheque, description="",numeroFacture  ) {
+    $.ajax(  //request POST vers fetchFunction.php
+    {
+       url:'models/FetchImpressionManager.php',
+       type:'POST',
+       data:{
+       'numeroCheque': numeroCheque,
+       'dateCheque': dateCheque,
+       'descriptionCheque': description,
+       'numeroFacture':numeroFacture 
+   },
+    success:function(msg){
+      
+ 
+    }
+});
 }
 
 function envoyerExpedition(chequeId){
@@ -566,7 +616,7 @@ function envoyerDescription(){
 
     console.log(document.getElementById("descriptionForm"));
     document.getElementById("descriptionForm").submit()
-    alert("dsd");
+
     document.getElementById('descriptionForm').style.display = "none";
 }
 function afficherDescription(idDivDescription){

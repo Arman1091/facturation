@@ -26,9 +26,12 @@ class FactureManager extends Model
             die();
         }
     }
+    
 
     public function getFacturesByFiltre($statut,$filtreValue){
         try {
+            // requête SQL qui nous permettent récupérer toutes les factures qui ont 
+            // un statut comme $statut , et le value avec qui on doit filtrer c'est le filtre value
                 $sql = "SELECT  fact.numeroFacture, fact.dateFacture, fact.montantFacture,
                                 fact.montantLettresFacture, fact.statutFacture, fact.fkSociete
                         FROM  facture AS fact 
@@ -38,19 +41,18 @@ class FactureManager extends Model
                         ON soc.fkBanque = bnq.id
                 WHERE (fact.numeroFacture LIKE '%$filtreValue%'
                 OR soc.nomSociete LIKE '%$filtreValue%') 
-                AND fact.statutFacture=:statut";
+                AND fact.statutFacture = :statut";
             
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(':statut', $statut, PDO::PARAM_STR);
             $query->execute();
             $data = $query->fetchAll(PDO::FETCH_ASSOC);
-            if($data){
+            if($data){//si y'a des Factures
                 foreach ($data as $value) {
-                    $factures[] = new  Facture($value);
+                    $factures[] = new  Facture($value);//creation une tableau des Facture
                 }
-                return $factures;
+                return $factures; //return
             }  
-            $query->closeCursor();
             } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             die();
@@ -76,19 +78,18 @@ class FactureManager extends Model
     public function editFacture($nFact,$editCol,$editValue)
     {
         try {
-            $x= $editCol;
-            $sql = "UPDATE `facture` SET " . $x . "=:colName
+            $colName= $editCol;
+            $sql = "UPDATE `facture` SET " . $colName . "=:colName
             WHERE `numeroFacture`=:numeroFact";
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(':numeroFact', $nFact, PDO::PARAM_STR);
             $query->bindValue(':colName', $editValue);
             $query->execute();
-            if(($query->rowCount())>0){
+            if(($query->rowCount())>0){ //on verifié si la modification a ete fait
                 return true;
             }else {
                 return false;
             }
-            $query->closeCursor();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             die();
@@ -116,7 +117,6 @@ class FactureManager extends Model
     //création facture
     public function newFacture($element)
     {
-
         try {
             $sql = "INSERT INTO `facture`(`numeroFacture`, `dateFacture`,`statutFacture`,  `montantFacture`,`montantLettresFacture`, `fkSociete`)
             VALUES (:n_fact,:date_facture,:statut,:montant_facture,:montant_lettres_facture,:fk_societe)";
@@ -128,7 +128,6 @@ class FactureManager extends Model
             $query->bindValue(":fk_societe", $element->fkSociete(), PDO::PARAM_INT);
             $query->bindValue(":statut", $element->statut(), PDO::PARAM_BOOL);
             $query->execute();
-            $query->closeCursor();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             die();

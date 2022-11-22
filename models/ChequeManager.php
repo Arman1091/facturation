@@ -87,7 +87,6 @@ class ChequeManager extends Model
     }
     public function annuler($nCheque, $description)
     {
-        $nCheque="xx001";
         try {
             $date = date('Y-m-d');
             $sql = "UPDATE `cheque` 
@@ -107,14 +106,15 @@ class ChequeManager extends Model
             die();
         }
     }
-    public function newCheque($numeroCheque, $dateCheque, $fkFacture)
+    public function newCheque($numeroCheque, $dateCheque, $description="z",$fkFacture)
     {
         try {
-            $sql = "INSERT INTO `cheque`(`numeroCheque`, `dateCheque`,`fkFacture`)
-            VALUES (:n_cheque,:date_cheque)";
+            $sql = "INSERT INTO `cheque`(`numeroCheque`, `dateCheque`,`descriptionCheque`,`fkFacture`)
+            VALUES (:n_cheque,:date_cheque,:date_facture,:fkFacture)";
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(":n_cheque",  $numeroCheque, PDO::PARAM_STR);
             $query->bindValue(":date_facture", $dateCheque, PDO::PARAM_STR);
+            $query->bindValue(":date_facture", $description, PDO::PARAM_STR);
             $query->bindValue(":fkFacture", $fkFacture, PDO::PARAM_STR);
             
             $query->execute();
