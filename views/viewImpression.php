@@ -1,32 +1,32 @@
  <?php
-    if (!empty($_POST)) {
-        if (isset($_POST["checkitems"])) {
-            $checkitems = $_POST["checkitems"];
-            if (isset($_POST["deleteOrPrint"])) {
-                $count = count($checkitems);
-                if ($_POST["deleteOrPrint"] == 1) {
-                    $factureManager = new FactureManager;
-                    for ($i = 0; $i < $count; $i++) {
-                        $id = $checkitems[$i];
-                        $factureManager->deleteFacture($id);
-                        //require "controllers/deleteFacture.php";
-                    }
-                    header("Location:impression");
-                } else {
-                    var_dump("dssd");
-                    die;
-                    // $_SESSION["checkitems"] = [
-                    //     "checkitems" => $checkitems
-                    // ];
+    // if (!empty($_POST)) {
+    //     if (isset($_POST["checkitems"])) {
+    //         $checkitems = $_POST["checkitems"];
+    //         if (isset($_POST["deleteOrPrint"])) {
+    //             $count = count($checkitems);
+    //             if ($_POST["deleteOrPrint"] == 1) {
+    //                 $factureManager = new FactureManager;
+    //                 for ($i = 0; $i < $count; $i++) {
+    //                     $id = $checkitems[$i];
+    //                     $factureManager->deleteFacture($id);
+    //                     //require "controllers/deleteFacture.php";
+    //                 }
+    //                 header("Location:impression");
+    //             } else {
+    //                 var_dump("dssd");
+    //                 die;
+    //                 // $_SESSION["checkitems"] = [
+    //                 //     "checkitems" => $checkitems
+    //                 // ];
 
-                    // header("Location:pdf-print.php");
-                    // exit();
-                }
-            }
-        } else {
-            echo ("il faus chocher au moin un row");
-        }
-    }
+    //                 // header("Location:pdf-print.php");
+    //                 // exit();
+    //             }
+    //         }
+    //     } else {
+    //         echo ("il faus chocher au moin un row");
+    //     }
+    // }
 
 
 
@@ -48,7 +48,7 @@
  </div>
  <div class="container">
      <form method="post" name="formImpression" id="formImpression">
-         <table  class="table" id="tableImression">
+         <table  class="table" id="tableImression"  class="tableImression">
              <thead>
                  <tr>
                      <th scope="col">
@@ -116,5 +116,5 @@
          </div>
 
      </form>
-     
+
 </div>

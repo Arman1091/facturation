@@ -7,6 +7,7 @@ class Facture
     private $montant;
     private $montantLettres;
     private $fkSociete;
+    private $statutCheque;
     public function __construct(array $data)
     {
         $this->hydrate($data);
@@ -59,6 +60,10 @@ class Facture
     {
         $this->statut = $statut;
     }
+    public function setstatutChequeFacture($statut_cheque)
+    {
+        $this->statutCheque = $statut_cheque;
+    }
 
     //getter
 
@@ -88,5 +93,9 @@ class Facture
     public function statut()
     {
         return $this->statut;
+    }
+    public function statutCheque()
+    {
+        return $this->statutCheque;
     }
 }

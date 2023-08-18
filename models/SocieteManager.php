@@ -1,10 +1,15 @@
 <?php
+
 class SocieteManager extends Model
 {
     static $bdd;
     public function getSocietes()
     {
-        $this->getBdd();
+ 
+      
+         $this->getBdd();
+ 
+
         return $this->getAll('societe ', 'Societe');
     }
     public function getSociete($id)

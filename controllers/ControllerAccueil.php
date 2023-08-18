@@ -16,7 +16,10 @@ class ControllerAccueil
 
     private function accueil()
     {
+  
         $this->societeManager = new SocieteManager;
+
+        
         $societes = $this->societeManager->getSocietes();
         usort($societes, 'cmp');
         $this->view = new View('Accueil');

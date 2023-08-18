@@ -166,3 +166,11 @@ body{
   list-style: none !important;
 
 }
+#tableSignature{
+  position: relative;
+}
+#descriptionSignatureDiv{
+  position: absolute;
+  top: 45%;
+  left: 55%;
+}

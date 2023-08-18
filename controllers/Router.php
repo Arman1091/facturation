@@ -1,5 +1,4 @@
 <?php
-
 require_once('views/View.php');
 class Router
 {
@@ -9,9 +8,11 @@ class Router
     {
         try {
 
+
             //chargement automatique classes
             spl_autoload_register(function ($class) {
                 require_once('models/' . $class . '.php');
+
             });
 
             $url = '';
@@ -28,6 +29,7 @@ class Router
                     throw new Exception('Page introuvable');
                 }
             } else {
+        
                 require_once('controllers/ControllerAccueil.php');
 
                 $this->_ctrl = new ControllerAccueil($url);

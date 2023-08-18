@@ -35,7 +35,7 @@ if (isset($_POST['printCheckItems'])
                 </div>
                 <div class="col-4">
                     <div>
-                        <p id="somme_shifre" class="text-center"style="padding: 10px;">'.$facture->getMontantLettres().'</p>
+                        <p id="somme_shifre" class="text-center"style="padding: 10px;">'.$facture->montant().'</p>
                         <p>SAINT-PALAIS-SUR-MER</p>
                         <p>'.date("d/m/y").'</p>
                     </div>

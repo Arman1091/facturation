@@ -4,7 +4,8 @@
     require_once('../'.$class . '.php');
 });
 
-if (1==1) {
+if (isset($_POST['socId'],$_POST['montantLettres'],$_POST['montant']) &&
+    !empty($_POST['socId']) && !empty($_POST['montantLettres']) && !empty($_POST['montant'])) {
     try {
 
         $id= strip_tags(htmlspecialchars($_POST['socId']));
@@ -12,10 +13,11 @@ if (1==1) {
         $montant = strip_tags(htmlspecialchars($_POST['montant']));
 
         $sociteManager = new SocieteManager;
-       $societe = $sociteManager->getSociete($id);
+        $societe = $sociteManager->getSociete($id);
+        $banque = $societe->getBanque();
       
           
-
+    
         echo '
         <div class="d-flex justify-content-center align-items-center" style="height: 100vh; width:800px">
         <div class="row" style="width:800px;">
@@ -26,11 +28,11 @@ if (1==1) {
                 <div>
                 <p id="societeNom">'.$societe->nom().'</p>
                 </div>
-                <div class="row d-flex justify-content-end">
+                <div class="row d-flex justify-content-start">
                     <div class="col-6">
-                        <p>ETOILS SECOURS</p>
-                        <p>120 RUE LUCIEN DEVAUX</p>
-                        <p>17420 SAINT-PALAIS-SUR-MER</p>
+                        <p>'.$banque->adresse().'</p>
+                        <p>'.$banque->cp().' '.$banque->ville().'</p>
+                        <p> TEL: '.$banque->tel().'</p>
                     </div>
                 </div>
             </div>

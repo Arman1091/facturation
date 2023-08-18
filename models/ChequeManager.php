@@ -31,7 +31,9 @@ class ChequeManager extends Model
     public function getChequesComplets()
     {
         try {
-            $sql = "SELECT * from `cheque` WHERE  statutChequeExpedition  IS NOT NULL" ;
+            $sql = "SELECT * from `cheque`
+             WHERE  statutChequeExpedition  IS NULL
+             AND descriptionCheque=''" ;
             $query = $this->getBdd()->prepare($sql);;
             $query->execute();
             $data = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -69,13 +71,15 @@ class ChequeManager extends Model
     {
         try {
             $date = date('Y-m-d');
+            //statutChequeExpedition =1, donc le cheque a été envoyé
             $sql = "UPDATE `cheque` 
-                 SET `statutChequeExpedition`= 1,`dateChequeExpedition`=:dateExpedition WHERE `numeroCheque`=:numero_cheque";
+                 SET `statutChequeExpedition`= 1,`dateChequeExpedition`=:dateExpedition 
+                  WHERE `numeroCheque`=:numero_cheque";
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(':numero_cheque', $nCheque, PDO::PARAM_STR);
             $query->bindValue(':dateExpedition', $date, PDO::PARAM_STR);
             $query->execute();
-            if(($query->rowCount())>0){
+            if(($query->rowCount())>0){//quand l'envoi de l'expedition a ete bien enregistrer
                 return true;
             }else {
                 return false;
@@ -85,10 +89,12 @@ class ChequeManager extends Model
             die();
         }
     }
-    public function annuler($nCheque, $description)
+    public function annuler($numroCheque, $descriptionCheque)
     {
         try {
-            $date = date('Y-m-d');
+            $date = date('Y-m-d');//date now
+            $nCheque = htmlspecialchars(strip_tags($numroCheque));
+            $description= htmlspecialchars(strip_tags($descriptionCheque));
             $sql = "UPDATE `cheque` 
                  SET `statutChequeExpedition`= 0,`dateChequeExpedition`=:dateExpedition,`descriptionCheque`=:descriptionCheque WHERE `numeroCheque`=:numero_cheque";
             $query = $this->getBdd()->prepare($sql);
@@ -96,7 +102,7 @@ class ChequeManager extends Model
             $query->bindValue(':dateExpedition', $date, PDO::PARAM_STR);
             $query->bindValue(':descriptionCheque', $description, PDO::PARAM_STR);
             $query->execute();
-            if(($query->rowCount())>0){
+            if(($query->rowCount())>0){//si l'annulation a ete fait
                 return true;
             }else {
                 return false;
@@ -106,15 +112,18 @@ class ChequeManager extends Model
             die();
         }
     }
-    public function newCheque($numeroCheque, $dateCheque, $description="z",$fkFacture)
+    public function newCheque($numeroCheque, $dateCheque, $statutCheque, $description,$fkFacture)
     {
         try {
-            $sql = "INSERT INTO `cheque`(`numeroCheque`, `dateCheque`,`descriptionCheque`,`fkFacture`)
-            VALUES (:n_cheque,:date_cheque,:date_facture,:fkFacture)";
+            $date = date('Y-m-d');
+            $sql = 'INSERT INTO `cheque`(`numeroCheque`, `dateCheque`,`statutChequeSignature`, `dateChequeSignature`, `descriptionCheque`,`fkFacture`)
+            VALUES (:n_cheque,:date_cheque,:statutChequeSignature,:dateChequeSignature,:descriptionCheque,:fkFacture)';
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(":n_cheque",  $numeroCheque, PDO::PARAM_STR);
-            $query->bindValue(":date_facture", $dateCheque, PDO::PARAM_STR);
-            $query->bindValue(":date_facture", $description, PDO::PARAM_STR);
+            $query->bindValue(":date_cheque", $dateCheque, PDO::PARAM_STR);
+            $query->bindValue(":statutChequeSignature",$statutCheque, PDO::PARAM_STR);
+            $query->bindValue(":dateChequeSignature",  $date, PDO::PARAM_STR);
+            $query->bindValue(":descriptionCheque", $description, PDO::PARAM_STR);
             $query->bindValue(":fkFacture", $fkFacture, PDO::PARAM_STR);
             
             $query->execute();

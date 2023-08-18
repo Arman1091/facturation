@@ -6,21 +6,23 @@ class FactureManager extends Model
         $this->getBdd();
         return $this->getAll('facture', 'Facture');
     }
-    public function getFacturesAttantes($statut)
+    public function getFacturesAttantes($statut, $statutCheque)
     {
         try {
-            $sql = "SELECT * from `facture` WHERE   `statutFacture`=:statut_facture";
+            $sql = "SELECT * from `facture` 
+                    WHERE   `statutFacture`=:statut_facture
+                    AND `statutChequeFacture`=:statut_cheque";
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(':statut_facture', $statut, PDO::PARAM_STR);
+            $query->bindValue(':statut_cheque', $statutCheque, PDO::PARAM_STR);
             $query->execute();
             $data = $query->fetchAll(PDO::FETCH_ASSOC);
-            if($data){
+            if($data){ //si il y'a yne facture
                 foreach ($data as $value) {
                     $factures[] = new  Facture($value);
                 }
                 return $factures;
             }     
-            $query->closeCursor();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             die();
@@ -28,10 +30,11 @@ class FactureManager extends Model
     }
     
 
-    public function getFacturesByFiltre($statut,$filtreValue){
+    public function getFacturesByFiltre($statut,$statutCheque,$filtreValue){
         try {
             // requête SQL qui nous permettent récupérer toutes les factures qui ont 
             // un statut comme $statut , et le value avec qui on doit filtrer c'est le filtre value
+            $filtreValue = htmlspecialchars(strip_tags($filtreValue));
                 $sql = "SELECT  fact.numeroFacture, fact.dateFacture, fact.montantFacture,
                                 fact.montantLettresFacture, fact.statutFacture, fact.fkSociete
                         FROM  facture AS fact 
@@ -41,10 +44,11 @@ class FactureManager extends Model
                         ON soc.fkBanque = bnq.id
                 WHERE (fact.numeroFacture LIKE '%$filtreValue%'
                 OR soc.nomSociete LIKE '%$filtreValue%') 
-                AND fact.statutFacture = :statut";
+                AND fact.statutFacture = :statut AND fact.statutChequeFacture = :statutCheque";
             
             $query = $this->getBdd()->prepare($sql);
             $query->bindValue(':statut', $statut, PDO::PARAM_STR);
+            $query->bindValue(':statutCheque', $statutCheque, PDO::PARAM_STR);
             $query->execute();
             $data = $query->fetchAll(PDO::FETCH_ASSOC);
             if($data){//si y'a des Factures
@@ -127,7 +131,12 @@ class FactureManager extends Model
             $query->bindValue(":montant_lettres_facture", $element->getMontantLettres());
             $query->bindValue(":fk_societe", $element->fkSociete(), PDO::PARAM_INT);
             $query->bindValue(":statut", $element->statut(), PDO::PARAM_BOOL);
-            $query->execute();
+            $query->execute(); 
+            if(($query->rowCount())>0){ 
+                return true;
+            }else {
+                return false;
+            }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             die();

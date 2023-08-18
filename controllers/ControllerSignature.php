@@ -14,9 +14,8 @@ class ControllerSignature
 
     public function signature()
     {
-
         $this->factureManager = new FactureManager;
-        $factures = $this->factureManager->getFactures();
+        $factures = $this->factureManager->getFacturesAttantes(1,0);
         $this->view = new View('Signature');
         $this->view->generate(array('factures' => $factures));
     }

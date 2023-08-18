@@ -14,10 +14,9 @@ if (isset($_POST['change']) && !empty($_POST['change'])) { //verification si tou
         $req->bindValue(':id', $id, PDO::PARAM_INT);
         $req->execute();
         $data = $req->fetch(PDO::FETCH_ASSOC);
-        if($data->countRow()){
-            $data_json = json_encode(($data));
-            echo ($data_json);
-        }
+        $data_json = json_encode(($data));
+        echo ( $data_json);
+
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         die();

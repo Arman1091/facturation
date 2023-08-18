@@ -1,4 +1,6 @@
 <?php
+
+
 if (!empty($_POST)) {
     // verfication que tout les cases sont exists
     if (
@@ -43,7 +45,9 @@ if (!empty($_POST)) {
     ]);
 
     $factureManager = new FactureManager;
-    $factureManager->newFacture($instance);
+    if($factureManager->newFacture($instance)){
+        $msg = "enregistrement effectué avec success";
+    }
 }
 
 ?>
@@ -175,7 +179,7 @@ if (!empty($_POST)) {
         </div>
     </div>
     <div class="text-center mt-3">
-        <button class="btn bg-primary " type="submit" form="factureForme" name="enregistrer" value="submit">Enregistrer</button>
+        <button class="btn bg-primary enregistrer" id="enregistrer" type="submit"  name="enregistrer" value="submit" onclick="enregistrerFacture()">Enregistrer</button>
         <button class="btn bg-secondary mx-1" type="button"   onclick="printCheque()">Imprimer</button>
     </div>
     <div class="mt-3" id="msgDiv">

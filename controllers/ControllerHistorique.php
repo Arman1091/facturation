@@ -14,7 +14,7 @@ class ControllerHistorique
     public function historique()
     {
         $this->chequeManager= new ChequeManager;
-        $cheques = $this->chequeManager->getChequesComplets();
+        $cheques = $this->chequeManager->getCheques();
         $this->view = new View('Historique');
         $this->view->generate(array('cheques' => $cheques));
     }

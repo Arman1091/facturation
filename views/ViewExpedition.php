@@ -9,7 +9,6 @@ $societeManager = new SocieteManager;
         <label class="mx-2" for="site-search"><strong>Search avec Societe/N_fact</strong></label>
          <input class="sitesearch" type="search" id="sitesearch" name="site-search">
    </div>
-    <form method="post" class="mx-1">
         <table class="table table-sm">
             <thead>
                 <tr>
@@ -27,7 +26,7 @@ $societeManager = new SocieteManager;
                     <th scope="col"> </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="tbodyExpedition">
 
                 <?php
                 if (isset($cheques)) {
@@ -41,7 +40,7 @@ $societeManager = new SocieteManager;
                         // $paiement = $paiementManager->getPaiement($paiementId);
                         // $arr = explode("_", $envois[$i]->NCheque());
                 ?>
-                   <tr>
+                   <tr class="tr<?=$i?>">
                         <th scope="row"><?= ($i + 1) ?></th>
                         <td><?= $facture->numero()?></td>
                         <td><?= $facture->date()?></td>
@@ -55,8 +54,8 @@ $societeManager = new SocieteManager;
                         <td class="d-flex">
                           
                     
-                                <button type="button" class="btn btn-danger" >Annuler</button>
-                                <button type="button" class="btn btn-primary mx-1" onclick="envoyerExpedition('<?= $cheques[$i]->numero()?>')" >Envoyer</button>
+                                <button type="button" class="btn btn-danger" onclick="annulerExpedition('tr<?= $i ?>')" >Annuler</button>
+                                <button type="button" class="btn btn-primary mx-1" onclick="envoyerExpedition('tr<?= $i ?>')" >Envoyer</button>
              
 
                         </td>
@@ -65,19 +64,18 @@ $societeManager = new SocieteManager;
                 } ?>
             </tbody>
         </table>
-    </form>
 </div>
- <div id="descriptionDiv" name="descriptionDiv" style="display:none">
+ <div id="descriptionExpeditionDiv" name="descriptionExpeditionDiv" style="display:none">
         <h1 class="text-center">Ajouter une raison </h1>
         <div class="d-flex justify-content-center">
-            <textarea name="description" id="description" cols="30" rows="10"></textarea>
+            <textarea name="descriptionExpeditioTextarea" id="descriptionExpeditionTextarea" cols="30" rows="10"></textarea>
         </div>
         <div class="d-flex justify-content-center mt-3">
-            <input type="hidden" id="rowDescription" name="rowDescription" value="">
-            <button class="mx-2" class="btn btn-primary" type='button' name="ok" onclick="envoyerDescription()">Ok</button>
-            <button class="btn btn-danger" type='button' onclick="annulerDescription()">Annuler</button>
+            <input type="hidden" id="expeditionHiddenValue" name="expeditionHiddenValue" >
+            <button class="mx-2" class="btn btn-primary" type='button' name="ok" onclick="envoyerExpeditionDescription()">Ok</button>
+            <button class="btn btn-danger" type='button' onclick="annulerExpeditionDescription()">Annuler</button>
         </div>
 </div>
 <div class="mt-3"id="msgDiv">
                  <h6 class="p-2" id="msg"></h6>
-         </div>
+</div>

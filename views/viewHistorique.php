@@ -42,14 +42,16 @@ $societeManager = new SocieteManager;
                     <td><?= $cheques[$i]->dateSignature()?></td>
                     <td><?= $cheques[$i]->dateExpedition()?></td>
                     <td>
-                        <?php if ($cheques[$i]->statutExpedition()== 1) { ?>
+                        <?php if ($cheques[$i]->statutExpedition()) { ?>
 
                             <span>
                                 <img src="assets/icons/succer.png" alt="" style="width:45px ;"> 
                             </span>
-                        <?php  } elseif($cheques[$i]->statutExpedition() !=null) { ?>
+                        <?php  } elseif($cheques[$i]->statutExpedition() !==NULL) { 
+                            ?>
+                            <h1></h1>
                             <span>
-                                <img src="assets/icons//annulation.png" alt="" style="width:28px ;" onmouseover="afficherDescription('divDescription<?= $i ?>')" onmouseout="desafficherDescription('divDescription<?= $i ?>')"> 
+                                <img src="assets/icons/annulation.png" alt="" style="width:28px ;" onmouseover="afficherDescription('divDescription<?= $i ?>')" onmouseout="desafficherDescription('divDescription<?= $i ?>')"> 
                             </span>
                                 <div class="mt-2">
                                      <p id="divDescription<?= $i ?>" class="text-danger" style="display: none;"><?= $cheques[$i]->description() ?></p>

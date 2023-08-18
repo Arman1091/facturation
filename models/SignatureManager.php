@@ -10,9 +10,11 @@ class SignatureManager extends Model
     private function getAllSigners()
     {
         try {
-            $sql = "SELECT * from facture WHERE `statutFacture`= :is_print  ORDER BY dateFacture DESC";
+            $sql = "SELECT * from facture WHERE `statutFacture`= :is_print AND `statutChequeFacture`=:statut_cheque
+             ORDER BY dateFacture DESC";
             $query = self::$bdd->prepare($sql);
             $query->bindValue(":is_print", 1);
+            $query->bindValue(":statut_cheque", 0);
             $query->execute();
             $signes = $query->fetchAll(PDO::FETCH_ASSOC);
             if ($signes) {

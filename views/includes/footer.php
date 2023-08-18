@@ -4,8 +4,10 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js"></script>
-<script src="assets/js/script.js">
-</script>
+<script src="assets/js/script.js"></script>
+<script src="assets/js/scriptImpression.js"></script>
+<script src="assets/js/scriptSignature.js"></script>
+<script src="assets/js/scriptExpedition.js"></script>
 </body>
 
 </html>

@@ -22,7 +22,7 @@
 
     <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
         <div class="container-fluid  ">
-            <a class="navbar-brand" href="#">Facturation</a>
+            <a class="navbar-brand" href="#" style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">EtoilesSecures</a>
 
             <button class="navbar-toggler" style="margin-right:5px !important;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
